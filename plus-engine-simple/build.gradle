@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.programm.plus'
+version '1.5-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'ch.qos.logback:logback-classic:1.3.0-alpha4'
+
+    implementation 'org.projectlombok:lombok:1.18.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+
+    compile 'com.programm.plus:plus-engine-api:1.5-SNAPSHOT'
+    compile 'com.programm.plus:plus-render-jcanvas:1.4-SNAPSHOT'
+    compile 'com.programm.plus:plus-goh-simple:1.3-SNAPSHOT'
+    compile 'com.programm.plus:plus-collision-aabb:1.0'
+    compile 'com.programm.plus:plus-camera-static:1.0'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+publishing {
+    publications {
+        plusenginesimple(MavenPublication) {
+            artifactId 'plus-engine-simple'
+
+            artifact("$buildDir/libs/plus-engine-simple-1.5-SNAPSHOT.jar")
+        }
+    }
+}

@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.programm.plus'
+version '1.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    implementation 'com.programm.plus:plus-core:1.6'
+    implementation 'com.programm.plus:plus-camera-api:1.0'
+}
+
+publishing {
+    publications {
+        pluscamerastatic(MavenPublication) {
+            artifactId 'plus-camera-static'
+            artifact("$buildDir/libs/plus-camera-static-1.1-SNAPSHOT.jar")
+        }
+    }
+}
