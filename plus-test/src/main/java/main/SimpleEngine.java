@@ -1,16 +1,14 @@
 package main;
 
 import com.programm.projects.plus.engine.api.AbstractEngine;
-import com.programm.projects.plus.engine.api.IRunLoop;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SimpleEngine extends AbstractEngine {
 
-    private IRunLoop runLoop;
-
     public SimpleEngine() {
         setRunLoop(new TestRunLoop(1));
+        setGOH(new TestGOH());
     }
 
     @Override
@@ -23,8 +21,4 @@ public class SimpleEngine extends AbstractEngine {
         log.info("Stopping Engine");
     }
 
-    @Override
-    protected void update() {
-        log.error("Test");
-    }
 }
