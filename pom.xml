@@ -13,6 +13,7 @@
         <module>plus-core</module>
         <module>plus-test</module>
         <module>plus-engine-api</module>
+        <module>plus-goh-api</module>
     </modules>
 
     <properties>
