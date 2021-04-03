@@ -3,13 +3,16 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 
+
 public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine {
+
+    private final EngineContext context = new EngineContext();
 
     protected IRunLoop runLoop;
     protected IGameObjectHandler goh;
 
     protected void update(){
-        goh.update();
+        goh.update(context);
     }
 
     @Override

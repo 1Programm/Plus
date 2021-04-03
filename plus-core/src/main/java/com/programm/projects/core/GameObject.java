@@ -96,10 +96,14 @@ public class GameObject implements IUpdatable, IInitializable{
     }
 
     @Override
-    public void update() {
+    public void update(IGameContext context) {
+        IGameContext newContext = context.createFromNewParent(this);
+
         for(IComponent component : componentMap.values()) {
-            component.update();
+            component.update(newContext);
         }
+
+        newContext.revert();
     }
 
     @SuppressWarnings("unchecked")

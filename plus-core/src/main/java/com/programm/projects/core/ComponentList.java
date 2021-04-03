@@ -19,9 +19,9 @@ class ComponentList implements IComponent{
     }
 
     @Override
-    public void update() {
+    public void update(IGameContext context) {
         for(IComponent c : components) {
-            c.update();
+            c.update(context);
         }
     }
 }

@@ -1,5 +1,6 @@
 package main;
 
+import com.programm.projects.core.IGameContext;
 import com.programm.projects.core.GameObject;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 
@@ -12,9 +13,9 @@ public class TestGOH implements IGameObjectHandler {
     private final List<GameObject> objects = new ArrayList<>();
 
     @Override
-    public void update() {
+    public void update(IGameContext context) {
         for(int i=0;i<objects.size();i++){
-            objects.get(i).update();
+            objects.get(i).update(context);
         }
     }
 

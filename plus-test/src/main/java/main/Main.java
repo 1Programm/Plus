@@ -1,5 +1,6 @@
 package main;
 
+import com.programm.projects.core.IGameContext;
 import com.programm.projects.core.GameObject;
 import com.programm.projects.core.IComponent;
 import com.programm.projects.plus.engine.api.IEngine;
@@ -16,8 +17,11 @@ public class Main {
         }
 
         @Override
-        public void update() {
-            log.info("TESSTTT");
+        public void update(IGameContext context) {
+            log.info("Update. Parent: {}", context.getObject());
+            GameObject obj = context.getObject();
+            IGameContext parentContext = context.getParentContext();
+
         }
     };
 
