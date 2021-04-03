@@ -14,6 +14,7 @@
         <module>plus-test</module>
         <module>plus-engine-api</module>
         <module>plus-goh-api</module>
+        <module>plus-renderer-api</module>
     </modules>
 
     <properties>
