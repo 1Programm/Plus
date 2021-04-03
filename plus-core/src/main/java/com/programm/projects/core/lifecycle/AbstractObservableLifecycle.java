@@ -34,4 +34,14 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
     public void addShutdownListener(Runnable onShutdown) {
         shutdownListeners.add(onShutdown);
     }
+
+    @Override
+    public void removeStartupListener(Runnable onStartup) {
+        startupListeners.remove(onStartup);
+    }
+
+    @Override
+    public void removeShutdownListener(Runnable onShutdown) {
+        shutdownListeners.remove(onShutdown);
+    }
 }
