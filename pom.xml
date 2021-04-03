@@ -11,6 +11,7 @@
     <modules>
         <module>plus-maths</module>
         <module>plus-core</module>
+        <module>plus-engine-api</module>
     </modules>
 
     <properties>
