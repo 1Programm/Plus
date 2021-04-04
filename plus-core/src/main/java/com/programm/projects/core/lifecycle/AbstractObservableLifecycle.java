@@ -11,6 +11,8 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
     protected abstract void onStartup();
     protected abstract void onShutdown();
 
+    protected void onAfterStartup(){ }
+
     @Override
     public final void startup() {
         onStartup();
@@ -18,6 +20,8 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
         for(int i=0;i<startupListeners.size();i++){
             startupListeners.get(i).run();
         }
+
+        onAfterStartup();
     }
 
     @Override
