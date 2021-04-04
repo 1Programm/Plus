@@ -18,6 +18,7 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
     private final JFrame frame;
     private final List<Consumer<IWindow>> windowResizeListeners = new ArrayList<>();
     private final List<Consumer<IWindow>> windowMoveListeners = new ArrayList<>();
+    private final List<Consumer<IWindow>> windowCloseListeners = new ArrayList<>();
     private boolean hasComponentListener;
 
     public TestWindow(String title, int width, int height) {
@@ -79,6 +80,11 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
         }
     }
 
+    @Override
+    public void addOnCloseListener(Consumer<IWindow> listener) {
+        windowCloseListeners.add(listener);
+    }
+
     //COMPONENT LISTENER ---------------
     @Override
     public void componentResized(ComponentEvent e) {
@@ -108,7 +114,7 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) { // On Window x Pressed
-
+        windowCloseListeners.forEach(l -> l.accept(this));
     }
 
     @Override

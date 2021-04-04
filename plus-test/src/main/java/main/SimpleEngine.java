@@ -21,5 +21,4 @@ public class SimpleEngine extends AbstractEngine {
     protected void onShutdown() {
         log.info("[Shutdown] - Engine");
     }
-
 }

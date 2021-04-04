@@ -1,17 +1,35 @@
 package main;
 
 import com.programm.projects.core.IGameContext;
+import com.programm.projects.core.events.IEventDispatcher;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.renderer.api.IRenderableObjectBatch;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.IWindow;
+import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TestRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
 
     private IWindow window;
+    private IEventDispatcher eventDispatcher;
+
+    @Override
+    public void init(IEventDispatcher eventDispatcher) {
+        if(window == null){
+            throw new IllegalStateException("Window is not created yet!");
+        }
+
+        this.eventDispatcher = eventDispatcher;
+        this.window.addOnCloseListener(this::onWindowClose);
+    }
+
+    private void onWindowClose(IWindow window){
+        WindowCloseEvent closeEvent = new WindowCloseEvent(window);
+        eventDispatcher.dispatchEvent(closeEvent);
+    }
 
     @Override
     public void onStartup() {
