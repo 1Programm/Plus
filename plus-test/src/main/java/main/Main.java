@@ -13,13 +13,12 @@ public class Main {
     private static IComponent testComponent = new IComponent() {
         @Override
         public void init() {
-            log.info("Test Init");
+            log.info("[Init] - Test Component");
         }
 
         @Override
         public void update(IGameContext context) {
-            log.info("Update. Parent: {}", context.getObject());
-
+            log.info("[Update] - Test Component");
         }
     };
 

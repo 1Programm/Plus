@@ -9,16 +9,17 @@ public class SimpleEngine extends AbstractEngine {
     public SimpleEngine() {
         setRunLoop(new TestRunLoop(1));
         setGOH(new TestGOH());
+        setRenderer(new TestRenderer());
     }
 
     @Override
     protected void onStartup() {
-        log.info("Starting Engine");
+        log.info("[Startup] - Engine");
     }
 
     @Override
     protected void onShutdown() {
-        log.info("Stopping Engine");
+        log.info("[Shutdown] - Engine");
     }
 
 }

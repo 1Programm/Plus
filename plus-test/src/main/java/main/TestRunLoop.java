@@ -17,6 +17,7 @@ public class TestRunLoop implements IRunLoop {
 
     @Override
     public void startup() {
+        log.info("[Startup] - Test Run Loop");
         if(running){
             log.warn("Loop is already running!");
             return;
@@ -28,6 +29,7 @@ public class TestRunLoop implements IRunLoop {
 
     @Override
     public void shutdown() {
+        log.info("[Shutdown] - Test Run Loop");
         running = false;
         thread.interrupt();
     }
