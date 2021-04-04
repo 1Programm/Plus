@@ -3,13 +3,13 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
+import com.programm.projects.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
-import com.programm.projects.plus.renderer.api.IWindow;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 
 
-public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine {
+public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle {
 
     private final EngineContext context = new EngineContext();
 
