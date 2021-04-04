@@ -1,8 +1,10 @@
 package com.programm.projects.plus.renderer.api;
 
+import com.programm.projects.core.lifecycle.ILifecycle;
+
 import java.util.function.Consumer;
 
-public interface IWindow {
+public interface IWindow extends ILifecycle {
 
     String getTitle();
     int getWidth();
@@ -11,6 +13,7 @@ public interface IWindow {
     void setVisible(boolean visible);
 
     void addResizeListener(Consumer<IWindow> listener);
+    void addMoveListener(Consumer<IWindow> listener);
 
 
 }

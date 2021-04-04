@@ -5,7 +5,7 @@ import com.programm.projects.core.lifecycle.ILifecycle;
 
 public interface IRenderer extends ILifecycle, IUpdatable {
 
-    void createWindow(int width, int height, String title);
+    void createWindow(String title, int width, int height);
 
     IWindow getWindow();
 
