@@ -19,8 +19,6 @@ public class Main {
         @Override
         public void update(IGameContext context) {
             log.info("Update. Parent: {}", context.getObject());
-            GameObject obj = context.getObject();
-            IGameContext parentContext = context.getParentContext();
 
         }
     };
