@@ -15,14 +15,19 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
     public final void startup() {
         onStartup();
 
-        startupListeners.forEach(Runnable::run);
+        for(int i=0;i<startupListeners.size();i++){
+            startupListeners.get(i).run();
+        }
     }
 
     @Override
+    //REVERSE ORDER TO STARTUP
     public final void shutdown() {
-        onShutdown();
+        for(int i=shutdownListeners.size()-1;i>=0;i--){
+            shutdownListeners.get(i).run();
+        }
 
-        shutdownListeners.forEach(Runnable::run);
+        onShutdown();
     }
 
     @Override
