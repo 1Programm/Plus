@@ -1,4 +1,4 @@
-package main;
+package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.core.IGameContext;
 import com.programm.projects.core.events.IEventDispatcher;
@@ -11,7 +11,7 @@ import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TestRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
+public class SwingRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
 
     private IWindow window;
     private IEventDispatcher eventDispatcher;
@@ -33,14 +33,14 @@ public class TestRenderer extends AbstractObservableLifecycle implements IRender
 
     @Override
     public void onStartup() {
-        log.info("[Startup] - Test Renderer");
+        log.info("[Startup] - Swing Renderer");
         createWindow("Engine", 600, 500);
         window.setVisible(true);
     }
 
     @Override
     public void onShutdown() {
-        log.info("[Shutdown] - Test Renderer");
+        log.info("[Shutdown] - Swing Renderer");
         window.setVisible(false);
     }
 
@@ -56,7 +56,7 @@ public class TestRenderer extends AbstractObservableLifecycle implements IRender
             return;
         }
 
-        window = new TestWindow(title, width, height);
+        window = new SwingWindow(title, width, height);
         addLifecycle(window);
     }
 

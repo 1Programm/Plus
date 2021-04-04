@@ -1,4 +1,4 @@
-package main;
+package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.plus.renderer.api.IWindow;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-public class TestWindow implements IWindow, ComponentListener, WindowListener {
+public class SwingWindow implements IWindow, ComponentListener, WindowListener {
 
     private final JFrame frame;
     private final List<Consumer<IWindow>> windowResizeListeners = new ArrayList<>();
@@ -21,7 +21,7 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
     private final List<Consumer<IWindow>> windowCloseListeners = new ArrayList<>();
     private boolean hasComponentListener;
 
-    public TestWindow(String title, int width, int height) {
+    public SwingWindow(String title, int width, int height) {
         this.frame = new JFrame(title);
         this.frame.setSize(width, height);
         this.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -31,12 +31,12 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
 
     @Override
     public void startup() {
-        log.info("[Startup] Test Window");
+        log.info("[Startup] Swing Window");
     }
 
     @Override
     public void shutdown() {
-        log.info("[Shutdown] Test Window");
+        log.info("[Shutdown] Swing Window");
         frame.dispose();
     }
 
@@ -141,4 +141,5 @@ public class TestWindow implements IWindow, ComponentListener, WindowListener {
     public void windowDeactivated(WindowEvent e) {
 
     }
+
 }
