@@ -14,6 +14,7 @@ public interface IWindow extends ILifecycle {
 
     void addResizeListener(Consumer<IWindow> listener);
     void addMoveListener(Consumer<IWindow> listener);
+    void addOnCloseListener(Consumer<IWindow> listener);
 
 
 }

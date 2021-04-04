@@ -1,5 +1,6 @@
 package com.programm.projects.plus.engine.api;
 
+import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
@@ -14,4 +15,5 @@ public interface IEngine extends IChainableLifecycle {
     //Temporary - replace by Initializer - System
     IGameObjectHandler getGOH();
 
+    IEventHandler events();
 }
