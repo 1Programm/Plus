@@ -8,4 +8,6 @@ public interface IEvent {
      */
     default boolean handle() { return true; }
 
+    default void consume() { }
+
 }
