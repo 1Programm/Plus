@@ -4,17 +4,20 @@ import com.programm.projects.core.IGameContext;
 import com.programm.projects.core.events.IEventDispatcher;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
-import com.programm.projects.plus.renderer.api.IRenderableObjectBatch;
+import com.programm.projects.core.IObjectBatch;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.IWindow;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
+
 @Slf4j
 public class SwingRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
 
-    private IWindow window;
+    private SwingWindow window;
     private IEventDispatcher eventDispatcher;
+    private IObjectBatch renderableBatch;
 
     @Override
     public void init(IEventDispatcher eventDispatcher) {
@@ -46,7 +49,8 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
 
     @Override
     public void update(IGameContext context) {
-
+        if(window == null) return;
+        window.canvas.render(renderableBatch, Color.RED);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     }
 
     @Override
-    public void setRenderableObjectBatch(IRenderableObjectBatch objectBatch) {
-
+    public void setRenderableBatch(IObjectBatch renderableBatch) {
+        this.renderableBatch = renderableBatch;
     }
 }

@@ -4,6 +4,7 @@ import com.programm.projects.plus.renderer.api.IWindow;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
@@ -16,6 +17,7 @@ import java.util.function.Consumer;
 public class SwingWindow implements IWindow, ComponentListener, WindowListener {
 
     private final JFrame frame;
+    SwingCanvas canvas;
     private final List<Consumer<IWindow>> windowResizeListeners = new ArrayList<>();
     private final List<Consumer<IWindow>> windowMoveListeners = new ArrayList<>();
     private final List<Consumer<IWindow>> windowCloseListeners = new ArrayList<>();
@@ -23,8 +25,14 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener {
 
     public SwingWindow(String title, int width, int height) {
         this.frame = new JFrame(title);
-        this.frame.setSize(width, height);
         this.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        this.canvas = new SwingCanvas();
+        this.canvas.setPreferredSize(new Dimension(width, height));
+        this.frame.add(canvas);
+        this.frame.pack();
+
+        this.frame.setLocationRelativeTo(null);
 
         this.frame.addWindowListener(this);
     }

@@ -1,5 +1,6 @@
 package com.programm.projects.plus.engine.api;
 
+import com.programm.projects.core.IObjectBatch;
 import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
@@ -47,7 +48,11 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         //Update all objects
         goh.update(context);
 
+        //Get batch of objects which will be rendered
+        IObjectBatch objectBatch = goh.getObjectBatch();
+
         //Render scene
+        renderer.setRenderableBatch(objectBatch);
         renderer.update(context);
     }
 
