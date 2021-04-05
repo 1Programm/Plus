@@ -50,7 +50,7 @@ class SwingCanvas extends Canvas {
                 g2d.draw(shape.getShape());
             }
 
-            g2d.scale(-scaleX, -scaleY);
+            g2d.scale(1/scaleX, 1/scaleY);
             g2d.translate(-x, -y);
         }
 

@@ -50,7 +50,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     @Override
     public void update(IGameContext context) {
         if(window == null) return;
-        window.canvas.render(renderableBatch, Color.RED);
+        window.canvas.render(renderableBatch, Color.WHITE);
     }
 
     @Override
