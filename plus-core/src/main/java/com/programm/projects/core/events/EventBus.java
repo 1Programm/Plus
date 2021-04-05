@@ -17,17 +17,28 @@ public class EventBus extends AbstractChainableEventHandler{
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IEvent> void onDispatchEvent(T event){
-        List<EventListener<? extends IEvent>> list = eventListenerMap.get(event.getClass());
+        handleEvent(event, event.getClass());
+    }
 
-        if(list == null) return;
+    @SuppressWarnings("unchecked")
+    private <T extends IEvent> void handleEvent(T event, Class<? extends IEvent> cls){
+        List<EventListener<? extends IEvent>> list = eventListenerMap.get(cls);
 
-        List<EventListener<T>> batch = (List<EventListener<T>>)(List<?>)list;
+        if(list != null) {
+            List<EventListener<T>> batch = (List<EventListener<T>>) (List<?>) list;
 
-        batch.forEach(l -> {
-            if(event.handle()) {
-                l.onEvent(event);
-            }
-        });
+            batch.forEach(l -> {
+                if (event.handle()) {
+                    l.onEvent(event);
+                }
+            });
+        }
+
+        Class<?> superCls = cls.getSuperclass();
+        if(IEvent.class.isAssignableFrom(superCls)){
+            Class<? extends IEvent> superEvtCls = (Class<? extends IEvent>) superCls;
+            handleEvent(superEvtCls.cast(event), superEvtCls);
+        }
     }
 
 }
