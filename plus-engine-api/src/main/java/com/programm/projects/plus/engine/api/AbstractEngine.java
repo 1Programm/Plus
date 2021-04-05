@@ -4,6 +4,8 @@ import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
+import com.programm.projects.plus.engine.api.events.EngineShutdownEvent;
+import com.programm.projects.plus.engine.api.events.EngineStartupEvent;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
@@ -27,6 +29,13 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         renderer.init(eventBus);
 
         events().listenFor(WindowCloseEvent.class, this::onWindowClose);
+
+        events().dispatchEvent(new EngineStartupEvent(this));
+    }
+
+    @Override
+    protected void onBeforeShutdown() {
+        events().dispatchEvent(new EngineShutdownEvent(this));
     }
 
     protected void update(){

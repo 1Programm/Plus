@@ -12,6 +12,7 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
     protected abstract void onShutdown();
 
     protected void onAfterStartup(){ }
+    protected void onBeforeShutdown(){ }
 
     @Override
     public final void startup() {
@@ -27,6 +28,8 @@ public abstract class AbstractObservableLifecycle implements IObservableLifecycl
     @Override
     //REVERSE ORDER TO STARTUP
     public final void shutdown() {
+        onBeforeShutdown();
+
         for(int i=shutdownListeners.size()-1;i>=0;i--){
             shutdownListeners.get(i).run();
         }
