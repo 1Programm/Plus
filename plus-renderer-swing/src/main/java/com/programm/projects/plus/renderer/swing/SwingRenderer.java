@@ -65,11 +65,6 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     }
 
     @Override
-    public IWindow getWindow() {
-        return window;
-    }
-
-    @Override
     public void setRenderableBatch(IObjectBatch renderableBatch) {
         this.renderableBatch = renderableBatch;
     }

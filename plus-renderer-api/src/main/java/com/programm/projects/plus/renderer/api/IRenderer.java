@@ -11,8 +11,6 @@ public interface IRenderer extends ILifecycle, IUpdatable {
 
     void createWindow(String title, int width, int height);
 
-    IWindow getWindow();
-
 
     void setRenderableBatch(IObjectBatch renderableBatch);
 
