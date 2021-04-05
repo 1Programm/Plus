@@ -39,8 +39,16 @@ public class Main {
                 .setPosition(100, 100)
                 .setScale(4, 4)
                 .add(moveComponent)
-                .add(new ColorMaterial(Color.WHITE))
-                .add(new SwingShape(new Rectangle2D.Float(-16, -16, 16, 16)))
+                .add(new ColorMaterial(Color.BLACK))
+                .add(SwingShape.Rectangle(32, 32))
+                .build()
+        );
+        goh.addObject(GameObject.create()
+                .setPosition(100, 200)
+                .setScale(4, 4)
+                .add(moveComponent)
+                .add(new ColorMaterial(Color.RED))
+                .add(SwingShape.Rectangle(40, 32))
                 .build()
         );
 
