@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 public class SimpleEngine extends AbstractEngine {
 
     public SimpleEngine() {
-        setRunLoop(new TestRunLoop(1));
-        setGOH(new TestGOH());
+        setRunLoop(new TestRunLoop(30));
         setRenderer(new SwingRenderer());
+        setGOH(new TestGOH());
     }
 
     @Override
