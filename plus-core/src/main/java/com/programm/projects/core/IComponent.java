@@ -1,9 +1,8 @@
 package com.programm.projects.core;
 
-public interface IComponent extends IUpdatable, IInitializable{
+public interface IComponent extends IInitializable{
 
-    default boolean canHaveMultiple(){
-        return false;
-    }
+    @Override
+    default void init() { }
 
 }

@@ -1,69 +1,73 @@
 package com.programm.projects.core;
 
-import com.programm.projects.plus.maths.Vector2f;
+import com.programm.projects.core.components.Mover;
+import com.programm.projects.core.components.Transform;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Getter
 public class GameObject implements IUpdatable, IInitializable{
 
     public static class GameObjectBuilder {
-        private final GameObject object;
+        private float x, y, sx, sy, r;
+        private final Map<Class<? extends IComponent>, IComponent> componentMap = new HashMap<>();
+        private final List<IUpdatableComponent> updatableComponents = new ArrayList<>();
 
         private GameObjectBuilder(){
-            this.object = new GameObject();
+            this.x = 0;
+            this.y = 0;
+            this.sx = 1;
+            this.sy = 1;
+            this.r = 0;
         }
 
         public GameObjectBuilder setPosition(float x, float y){
-            this.object.position.set(x, y);
+            this.x = x;
+            this.y = y;
             return this;
         }
 
-        public GameObjectBuilder setSize(float w, float h){
-            this.object.size.set(w, h);
+        public GameObjectBuilder setScale(float scaleX, float scaleY){
+            this.sx = scaleX;
+            this.sy = scaleY;
             return this;
         }
 
         public GameObjectBuilder setRotation(float rotation){
-            this.object.rotation = rotation;
+            this.r = rotation;
             return this;
         }
 
         public GameObjectBuilder add(IComponent component){
             Class<? extends IComponent> cls = component.getClass();
+            boolean isUpdatable = component instanceof IUpdatableComponent;
 
-            if(!object.componentMap.containsKey(cls)){
-                object.componentMap.put(cls, component);
+            if(!componentMap.containsKey(cls)) {
+                componentMap.put(cls, component);
+                if (isUpdatable) {
+                    updatableComponents.add((IUpdatableComponent) component);
+                }
             }
             else {
-                if(!component.canHaveMultiple()){
-                    log.warn("Object can not have multiple components of class [{}]!", cls);
-                    return this;
-                }
-
-                IComponent c = object.componentMap.get(cls);
-
-                if(c instanceof ComponentList){
-                    ComponentList componentList = (ComponentList) c;
-                    componentList.add(component);
-                }
-                else {
-                    ComponentList componentList = new ComponentList();
-                    componentList.add(c);
-                    componentList.add(component);
-                    object.componentMap.put(cls, componentList);
-                }
+                log.warn("Component [{}] is already set!", component.getClass());
             }
 
             return this;
         }
 
         public GameObject build(){
-            return object;
+            Transform transform = new Transform(x, y, sx, sy, r);
+            Mover mover = new Mover();
+
+            add(transform);
+            add(mover);
+
+            return new GameObject(transform, mover, componentMap, updatableComponents);
         }
 
     }
@@ -76,20 +80,24 @@ public class GameObject implements IUpdatable, IInitializable{
 
 
 
+    //STATIC COMPONENTS FOR EVERY OBJECT
+    @Getter
+    private final Transform transform;
+    private final Mover mover;
 
-    private boolean initialized;
 
-    private final Vector2f position = new Vector2f();
-    private final Vector2f size = new Vector2f();
-    private float rotation;
+    private final Map<Class<? extends IComponent>, IComponent> componentMap;
+    private final List<IUpdatableComponent> updatableComponents;
 
-    private final Map<Class<? extends IComponent>, IComponent> componentMap = new HashMap<>();
-
-    private GameObject(){}
+    private GameObject(Transform transform, Mover mover, Map<Class<? extends IComponent>, IComponent> componentMap, List<IUpdatableComponent> updatableComponents) {
+        this.transform = transform;
+        this.mover = mover;
+        this.componentMap = componentMap;
+        this.updatableComponents = updatableComponents;
+    }
 
     @Override
     public void init() {
-        initialized = true;
         for(IComponent component : componentMap.values()) {
             component.init();
         }
@@ -99,11 +107,13 @@ public class GameObject implements IUpdatable, IInitializable{
     public void update(IGameContext context) {
         IGameContext newContext = context.createFromNewParent(this);
 
-        for(IComponent component : componentMap.values()) {
+        for(IUpdatableComponent component : updatableComponents) {
             component.update(newContext);
         }
 
         newContext.revert();
+
+        mover.update(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -113,6 +123,19 @@ public class GameObject implements IUpdatable, IInitializable{
         if(component == null) return null;
 
         return (T)component;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends IComponent> List<T> getComponentList(Class<T> cls){
+        List<T> components = new ArrayList<>();
+
+        for(Class<?> c : componentMap.keySet()){
+            if(cls.isAssignableFrom(c)){
+                components.add((T)componentMap.get(c));
+            }
+        }
+
+        return components;
     }
 
 }
