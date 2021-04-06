@@ -2,13 +2,14 @@ package main;
 
 import com.programm.projects.core.*;
 import com.programm.projects.core.components.ColorMaterial;
+import com.programm.projects.core.components.Model;
 import com.programm.projects.core.components.Mover;
 import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.maths.Vector2f;
 import com.programm.projects.plus.renderer.api.events.KeyPressedEvent;
 import com.programm.projects.plus.renderer.api.events.KeyReleasedEvent;
-import com.programm.projects.plus.renderer.swing.components.SwingShape;
+import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -82,18 +83,11 @@ public class Main {
         IGameObjectHandler goh = engine.getGOH();
         goh.addObject(GameObject.create()
                 .setPosition(100, 100)
-                .setScale(5, 5)
+                .setScale(2, 2)
                 .add(new MoveComponent(5))
                 .add(new ColorMaterial(Color.BLACK))
-                .add(SwingShape.Rectangle(32, 32))
-                .build()
-        );
-        goh.addObject(GameObject.create()
-                .setPosition(100, 200)
-                .setScale(4, 4)
-//                .add(new MoveComponent(2))
-                .add(new ColorMaterial(Color.RED))
-                .add(SwingShape.Rectangle(40, 32))
+//                .add(SwingShape.Rectangle(32, 32))
+                .add(Model.Rectangle(32, 32))
                 .build()
         );
 
