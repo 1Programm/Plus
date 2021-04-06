@@ -1,5 +1,6 @@
 package main;
 
+import com.programm.projects.core.IEngineContext;
 import com.programm.projects.core.IGameContext;
 import com.programm.projects.core.GameObject;
 import com.programm.projects.core.IObjectBatch;
@@ -12,9 +13,15 @@ import java.util.List;
 @Slf4j
 public class TestGOH implements IGameObjectHandler {
 
+    private IEngineContext engineContext;
     private boolean initialized;
     private final List<GameObject> objects = new ArrayList<>();
     private final TestBatch batch = new TestBatch();
+
+    @Override
+    public void setup(IEngineContext engineContext) {
+        this.engineContext = engineContext;
+    }
 
     @Override
     public void update(IGameContext context) {
@@ -28,7 +35,7 @@ public class TestGOH implements IGameObjectHandler {
         log.info("[Startup] - Test GOH");
         initialized = true;
         for(int i=0;i<objects.size();i++){
-            objects.get(i).init();
+            objects.get(i).init(engineContext);
         }
     }
 
@@ -43,7 +50,7 @@ public class TestGOH implements IGameObjectHandler {
         batch.add(object);
 
         if(initialized){ //If initialize phase is already over initialize object instantly
-            object.init();
+            object.init(engineContext);
         }
     }
 

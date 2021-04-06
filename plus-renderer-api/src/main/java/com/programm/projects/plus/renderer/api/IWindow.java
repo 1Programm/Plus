@@ -12,9 +12,4 @@ public interface IWindow extends ILifecycle {
 
     void setVisible(boolean visible);
 
-    void addResizeListener(Consumer<IWindow> listener);
-    void addMoveListener(Consumer<IWindow> listener);
-    void addOnCloseListener(Consumer<IWindow> listener);
-
-
 }

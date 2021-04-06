@@ -1,11 +1,13 @@
 package com.programm.projects.plus.goh.api;
 
 import com.programm.projects.core.GameObject;
+import com.programm.projects.core.IEngineContext;
 import com.programm.projects.core.IObjectBatch;
-import com.programm.projects.core.IUpdatable;
-import com.programm.projects.core.lifecycle.ILifecycle;
+import com.programm.projects.core.ISubsystem;
 
-public interface IGameObjectHandler extends ILifecycle, IUpdatable {
+public interface IGameObjectHandler extends ISubsystem {
+
+    void setup(IEngineContext engineContext);
 
     void addObject(GameObject object);
 

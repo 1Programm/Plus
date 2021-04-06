@@ -12,14 +12,4 @@ public class SimpleEngine extends AbstractEngine {
         setRenderer(new SwingRenderer());
         setGOH(new TestGOH());
     }
-
-    @Override
-    protected void onStartup() {
-        log.info("[Startup] - Engine");
-    }
-
-    @Override
-    protected void onShutdown() {
-        log.info("[Shutdown] - Engine");
-    }
 }

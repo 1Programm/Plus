@@ -1,16 +1,12 @@
 package com.programm.projects.plus.renderer.api;
 
 import com.programm.projects.core.IObjectBatch;
-import com.programm.projects.core.IUpdatable;
-import com.programm.projects.core.events.IEventDispatcher;
-import com.programm.projects.core.lifecycle.ILifecycle;
+import com.programm.projects.core.ISubsystem;
+import com.programm.projects.core.events.IEventHandler;
 
-public interface IRenderer extends ILifecycle, IUpdatable {
+public interface IRenderer extends ISubsystem {
 
-    void init(IEventDispatcher eventDispatcher);
-
-    void createWindow(String title, int width, int height);
-
+    void setup(IEventHandler eventHandler, WindowInfo windowInfo);
 
     void setRenderableBatch(IObjectBatch renderableBatch);
 

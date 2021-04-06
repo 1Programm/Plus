@@ -16,6 +16,11 @@ public class TestRunLoop implements IRunLoop {
     }
 
     @Override
+    public void setup(Runnable updateCallback) {
+        this.updateCallback = updateCallback;
+    }
+
+    @Override
     public void startup() {
         log.info("[Startup] - Test Run Loop");
         if(running){
@@ -45,10 +50,5 @@ public class TestRunLoop implements IRunLoop {
                 updateCallback.run();
             }
         }catch (InterruptedException ignored){}
-    }
-
-    @Override
-    public void init(Runnable updateCallback) {
-        this.updateCallback = updateCallback;
     }
 }

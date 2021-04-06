@@ -4,6 +4,6 @@ import com.programm.projects.core.lifecycle.ILifecycle;
 
 public interface IRunLoop extends ILifecycle {
 
-    void init(Runnable updateCallback);
+    void setup(Runnable updateCallback);
 
 }

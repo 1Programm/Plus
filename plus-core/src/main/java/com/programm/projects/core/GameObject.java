@@ -97,9 +97,9 @@ public class GameObject implements IUpdatable, IInitializable{
     }
 
     @Override
-    public void init() {
+    public void init(IEngineContext engineContext) {
         for(IComponent component : componentMap.values()) {
-            component.init();
+            component.init(engineContext);
         }
     }
 

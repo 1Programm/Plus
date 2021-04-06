@@ -1,5 +1,6 @@
 package com.programm.projects.plus.engine.api;
 
+import com.programm.projects.core.IEngineContext;
 import com.programm.projects.core.IObjectBatch;
 import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
@@ -9,34 +10,70 @@ import com.programm.projects.plus.engine.api.events.EngineShutdownEvent;
 import com.programm.projects.plus.engine.api.events.EngineStartupEvent;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
+import com.programm.projects.plus.renderer.api.WindowInfo;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+public class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle, IEngineContext {
 
-public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle {
-
-    private final EngineContext context = new EngineContext();
+    private final GameStackContext gameContext = new GameStackContext();
+    private final EventBus eventBus = new EventBus();
 
     protected IRunLoop runLoop;
     protected IGameObjectHandler goh;
     protected IRenderer renderer;
 
-    private EventBus eventBus = new EventBus();
-
+    protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
 
+    //TODO EngineInfo -> WindowInfo with defaults
+
+    //TEMPORARY:
+    private final WindowInfo windowInfo = new WindowInfo("Plus Engine", 600, 500);
+
+
+    /*
+     * -- LIFECYCLE METHODS --
+     */
     @Override
-    protected void onAfterStartup() {
-        //INIT
-        renderer.init(eventBus);
+    protected void onStartup() {
+        phase = EnginePhase.STARTING;
+        log.info("[Startup] - Engine");
 
         events().listenFor(WindowCloseEvent.class, this::onWindowClose);
 
-        events().dispatchEvent(new EngineStartupEvent(this));
+        //[PREPARE] PHASE
+        runLoop.setup(this::update);
+        renderer.setup(events(), windowInfo);
+        goh.setup(this);
+
+
+        phase = EnginePhase.PREPARED;
+    }
+
+    @Override
+    protected void onAfterStartup() {
+        phase = EnginePhase.STARTED;
+        events().dispatch(new EngineStartupEvent(this));
     }
 
     @Override
     protected void onBeforeShutdown() {
-        events().dispatchEvent(new EngineShutdownEvent(this));
+        phase = EnginePhase.CLEANUP;
+        events().dispatch(new EngineShutdownEvent(this));
+    }
+
+    @Override
+    protected void onShutdown() {
+        log.info("[Shutdown] - Engine");
+        phase = EnginePhase.SHUTDOWN;
+    }
+
+    //------------------
+
+    private void onWindowClose(WindowCloseEvent e){
+        stopRequest = true;
     }
 
     protected void update(){
@@ -46,15 +83,22 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         }
 
         //Update all objects
-        goh.update(context);
+        goh.update(gameContext);
 
         //Get batch of objects which will be rendered
         IObjectBatch objectBatch = goh.getObjectBatch();
 
         //Render scene
         renderer.setRenderableBatch(objectBatch);
-        renderer.update(context);
+        renderer.update(gameContext);
     }
+
+
+
+
+    /*
+     * GETTER AND SETTER
+     */
 
     @Override
     public void setRunLoop(IRunLoop runLoop) {
@@ -64,7 +108,6 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
         this.runLoop = runLoop;
         addLifecycle(runLoop);
-        runLoop.init(this::update);
     }
 
     @Override
@@ -75,7 +118,6 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
         this.goh = goh;
         addLifecycle(goh);
-        //goh.init();
     }
 
     @Override
@@ -89,16 +131,18 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     @Override
-    public IGameObjectHandler getGOH() {
-        return goh;
-    }
-
-    @Override
     public IEventHandler events() {
         return eventBus;
     }
 
-    private void onWindowClose(WindowCloseEvent e){
-        stopRequest = true;
+    @Override
+    public EnginePhase phase() {
+        return phase;
     }
+
+    @Override
+    public IGameObjectHandler getGOH() {
+        return goh;
+    }
+
 }

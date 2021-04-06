@@ -1,13 +1,14 @@
 package com.programm.projects.plus.renderer.swing;
 
+import com.programm.projects.core.IEngineContext;
 import com.programm.projects.core.IGameContext;
-import com.programm.projects.core.events.IEventDispatcher;
+import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.core.IObjectBatch;
+import com.programm.projects.plus.renderer.api.IMouse;
 import com.programm.projects.plus.renderer.api.IRenderer;
-import com.programm.projects.plus.renderer.api.IWindow;
-import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
+import com.programm.projects.plus.renderer.api.WindowInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -16,28 +17,17 @@ import java.awt.*;
 public class SwingRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
 
     private SwingWindow window;
-    private IEventDispatcher eventDispatcher;
     private IObjectBatch renderableBatch;
 
     @Override
-    public void init(IEventDispatcher eventDispatcher) {
-        if(window == null){
-            throw new IllegalStateException("Window is not created yet!");
-        }
-
-        this.eventDispatcher = eventDispatcher;
-        this.window.addOnCloseListener(this::onWindowClose);
-    }
-
-    private void onWindowClose(IWindow window){
-        WindowCloseEvent closeEvent = new WindowCloseEvent(window);
-        eventDispatcher.dispatchEvent(closeEvent);
+    public void setup(IEventHandler eventHandler, WindowInfo windowInfo) {
+        window = new SwingWindow(windowInfo.getTitle(), windowInfo.getWidth(), windowInfo.getHeight(), eventHandler);
+        addLifecycle(window);
     }
 
     @Override
     public void onStartup() {
         log.info("[Startup] - Swing Renderer");
-        createWindow("Engine", 600, 500);
         window.setVisible(true);
     }
 
@@ -54,18 +44,8 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     }
 
     @Override
-    public void createWindow(String title, int width, int height) {
-        if(window != null){
-            log.error("Window has already been created!");
-            return;
-        }
-
-        window = new SwingWindow(title, width, height);
-        addLifecycle(window);
-    }
-
-    @Override
     public void setRenderableBatch(IObjectBatch renderableBatch) {
         this.renderableBatch = renderableBatch;
     }
+
 }

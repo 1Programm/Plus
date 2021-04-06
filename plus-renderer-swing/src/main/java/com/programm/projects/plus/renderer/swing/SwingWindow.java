@@ -1,29 +1,29 @@
 package com.programm.projects.plus.renderer.swing;
 
+import com.programm.projects.core.events.IEventDispatcher;
 import com.programm.projects.plus.renderer.api.IWindow;
+import com.programm.projects.plus.renderer.api.events.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 @Slf4j
-public class SwingWindow implements IWindow, ComponentListener, WindowListener {
+public class SwingWindow implements IWindow, ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener {
 
     private final JFrame frame;
-    SwingCanvas canvas;
-    private final List<Consumer<IWindow>> windowResizeListeners = new ArrayList<>();
-    private final List<Consumer<IWindow>> windowMoveListeners = new ArrayList<>();
-    private final List<Consumer<IWindow>> windowCloseListeners = new ArrayList<>();
-    private boolean hasComponentListener;
+    private final IEventDispatcher eventDispatcher;
+    final SwingCanvas canvas;
+    private final SwingMouse mouse;
+    private final SwingKeyboard keyboard;
 
-    public SwingWindow(String title, int width, int height) {
+
+    public SwingWindow(String title, int width, int height, IEventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
+
         this.frame = new JFrame(title);
         this.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -35,6 +35,12 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener {
         this.frame.setLocationRelativeTo(null);
 
         this.frame.addWindowListener(this);
+        this.canvas.addKeyListener(this);
+        this.canvas.addMouseListener(this);
+        this.canvas.addMouseMotionListener(this);
+
+        this.mouse = new SwingMouse();
+        this.keyboard = new SwingKeyboard();
     }
 
     @Override
@@ -68,86 +74,121 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener {
         frame.setVisible(visible);
     }
 
-    @Override
-    public void addResizeListener(Consumer<IWindow> listener) {
-        windowResizeListeners.add(listener);
 
-        if(!hasComponentListener){
-            hasComponentListener = true;
-            frame.addComponentListener(this);
-        }
-    }
 
-    @Override
-    public void addMoveListener(Consumer<IWindow> listener) {
-        windowMoveListeners.add(listener);
 
-        if(!hasComponentListener){
-            hasComponentListener = true;
-            frame.addComponentListener(this);
-        }
-    }
 
-    @Override
-    public void addOnCloseListener(Consumer<IWindow> listener) {
-        windowCloseListeners.add(listener);
-    }
 
     //COMPONENT LISTENER ---------------
     @Override
     public void componentResized(ComponentEvent e) {
-        windowResizeListeners.forEach(l -> l.accept(this));
+        //WINDOW RESIZE EVENT
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-        windowMoveListeners.forEach(l -> l.accept(this));
+        //WINDOW MOVE EVENT
     }
 
     @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
+    public void componentShown(ComponentEvent e) { }
 
     @Override
-    public void componentHidden(ComponentEvent e) {
-
-    }
+    public void componentHidden(ComponentEvent e) { }
 
     //WINDOW LISTENER ---------------
     @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
+    public void windowOpened(WindowEvent e) { }
 
     @Override
     public void windowClosing(WindowEvent e) { // On Window x Pressed
-        windowCloseListeners.forEach(l -> l.accept(this));
+        WindowCloseEvent closeEvent = new WindowCloseEvent(this);
+        eventDispatcher.dispatch(closeEvent);
     }
 
     @Override
-    public void windowClosed(WindowEvent e) {
+    public void windowClosed(WindowEvent e) { }
 
+    @Override
+    public void windowIconified(WindowEvent e) { }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) { }
+
+    @Override
+    public void windowActivated(WindowEvent e) { }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) { }
+
+
+    //KEY LISTENER ---------------
+
+    @Override
+    public void keyTyped(KeyEvent e) { }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = Utils.parseSwingKeyCode(e.getKeyCode());
+
+        int count = keyboard.keys[keyCode]++;
+        KeyPressedEvent event = new KeyPressedEvent(keyboard, keyCode, count);
+        eventDispatcher.dispatch(event);
     }
 
     @Override
-    public void windowIconified(WindowEvent e) {
+    public void keyReleased(KeyEvent e) {
+        int keyCode = Utils.parseSwingKeyCode(e.getKeyCode());
 
+        keyboard.keys[keyCode] = 0;
+        KeyReleasedEvent event = new KeyReleasedEvent(keyboard, keyCode);
+        eventDispatcher.dispatch(event);
+    }
+
+    //MOUSE LISTENER ---------------
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int button = Utils.parseSwingMouseButton(e.getButton());
+
+        mouse.buttonPressed[button] = true;
+        mouse.dragX = e.getX();
+        mouse.dragY = e.getY();
+
+        MousePressedEvent event = new MousePressedEvent(mouse, button);
+        eventDispatcher.dispatch(event);
     }
 
     @Override
-    public void windowDeiconified(WindowEvent e) {
+    public void mouseReleased(MouseEvent e) {
+        int button = Utils.parseSwingMouseButton(e.getButton());
 
+        mouse.buttonPressed[button] = false;
+
+        MouseReleasedEvent event = new MouseReleasedEvent(mouse, button);
+        eventDispatcher.dispatch(event);
     }
 
     @Override
-    public void windowActivated(WindowEvent e) {
+    public void mouseEntered(MouseEvent e) {}
 
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        mouse.x = e.getX();
+        mouse.y = e.getY();
     }
 
     @Override
-    public void windowDeactivated(WindowEvent e) {
+    public void mouseMoved(MouseEvent e) {
+        mouse.x = e.getX();
+        mouse.y = e.getY();
 
+        MouseMovedEvent event = new MouseMovedEvent(mouse);
+        eventDispatcher.dispatch(event);
     }
-
 }

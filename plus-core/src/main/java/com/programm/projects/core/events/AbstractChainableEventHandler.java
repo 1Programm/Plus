@@ -10,12 +10,12 @@ public abstract class AbstractChainableEventHandler implements IChainableEventHa
     protected abstract <T extends IEvent> void onDispatchEvent(T event);
 
     @Override
-    public final <T extends IEvent> void dispatchEvent(T event) {
+    public final <T extends IEvent> void dispatch(T event) {
         if(event.handle()){
             onDispatchEvent(event);
         }
 
-        eventHandlers.forEach(h -> h.dispatchEvent(event));
+        eventHandlers.forEach(h -> h.dispatch(event));
     }
 
     @Override

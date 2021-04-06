@@ -3,19 +3,19 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.core.GameObject;
 import com.programm.projects.core.IGameContext;
 
-public class EngineContext implements IGameContext {
+public class GameStackContext implements IGameContext {
 
     private static final int MAX_INDEX = 10;
 
     private final GameObject[] stack;
     private int index;
 
-    public EngineContext(){
+    public GameStackContext(){
         this.stack = new GameObject[MAX_INDEX];
         this.index = -1;
     }
 
-    private EngineContext(GameObject[] stack, int index){
+    private GameStackContext(GameObject[] stack, int index){
         this.stack = stack;
         this.index = index;
     }
@@ -30,7 +30,7 @@ public class EngineContext implements IGameContext {
     public IGameContext getParentContext() {
         if(index == -1) return null;
 
-        return new EngineContext(stack, index - 1);
+        return new GameStackContext(stack, index - 1);
     }
 
     @Override
