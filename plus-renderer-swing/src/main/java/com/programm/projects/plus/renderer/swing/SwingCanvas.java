@@ -3,8 +3,10 @@ package com.programm.projects.plus.renderer.swing;
 import com.programm.projects.core.GameObject;
 import com.programm.projects.core.IObjectBatch;
 import com.programm.projects.core.components.ColorMaterial;
+import com.programm.projects.core.components.IModelComponent;
+import com.programm.projects.core.components.Model;
 import com.programm.projects.core.components.Transform;
-import com.programm.projects.plus.renderer.swing.components.SwingShape;
+import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -44,10 +46,34 @@ class SwingCanvas extends Canvas {
                 g.setColor(colorMaterial.getColor());
             }
 
-            SwingShape shape = obj.getComponent(SwingShape.class);
+            Model model = obj.getComponent(Model.class);
 
-            if(shape != null){
-                g2d.draw(shape.getShape());
+            if(model != null){
+                IModelComponent modelComponent = model.getModelComponent();
+                Shape shape;
+
+
+                if(modelComponent instanceof SwingModelComponent) {
+                    shape = ((SwingModelComponent)modelComponent).getShape();
+                }
+                else {
+                    float[] vertices = model.getVertices();
+                    int length = vertices.length / 2;
+
+                    int[] xPoints = new int[length];
+                    int[] yPoints = new int[length];
+
+                    for (int i = 0; i < length; i++) {
+                        xPoints[i] = (int) vertices[i * 2];
+                        yPoints[i] = (int) vertices[i * 2 + 1];
+                    }
+
+                    shape = new Polygon(xPoints, yPoints, length);
+                    modelComponent = new SwingModelComponent(shape);
+                    model.setModelComponent(modelComponent);
+                }
+
+                g2d.draw(shape);
             }
 
             g2d.scale(1/scaleX, 1/scaleY);
