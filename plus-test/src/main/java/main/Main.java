@@ -3,6 +3,7 @@ package main;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
+import com.programm.projects.plus.engine.simple.SimpleEngine;
 import com.programm.projects.plus.goh.api.IObjectConsumer;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.Model;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import main.components.KeyboardController;
 
 import java.awt.*;
-import java.util.List;
 
 @Slf4j
 public class Main {
@@ -28,7 +28,7 @@ public class Main {
         objects.add(GameObject.create()
                 .setPosition(100, 100)
                 .setScale(2, 2)
-                .add(new KeyboardController(5))
+                .add(new KeyboardController(3))
                 .add(new ColorMaterial(Color.BLACK, Color.RED))
                 .add(Model.Rectangle(32, 32))
                 .build()
