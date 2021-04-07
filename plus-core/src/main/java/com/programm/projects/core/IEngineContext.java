@@ -6,4 +6,6 @@ public interface IEngineContext {
 
     IEventHandler events();
 
+    IRendererContext rendererContext();
+
 }

@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 @Slf4j
-public class SwingWindow implements IWindow, ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener {
+public class SwingWindow implements IWindow, ComponentListener, WindowListener, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
     private final JFrame frame;
     private final IEventDispatcher eventDispatcher;
@@ -38,6 +38,7 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener, 
         this.canvas.addKeyListener(this);
         this.canvas.addMouseListener(this);
         this.canvas.addMouseMotionListener(this);
+        this.canvas.addMouseWheelListener(this);
 
         this.mouse = new SwingMouse();
         this.keyboard = new SwingKeyboard();
@@ -189,6 +190,15 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener, 
         mouse.y = e.getY();
 
         MouseMovedEvent event = new MouseMovedEvent(mouse);
+        eventDispatcher.dispatch(event);
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int scrollAmount = e.getUnitsToScroll();
+        mouse.scroll += scrollAmount;
+
+        MouseScrolledEvent event = new MouseScrolledEvent(mouse, scrollAmount);
         eventDispatcher.dispatch(event);
     }
 }

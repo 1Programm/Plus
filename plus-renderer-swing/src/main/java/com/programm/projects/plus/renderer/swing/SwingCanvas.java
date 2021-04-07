@@ -2,9 +2,9 @@ package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.core.GameObject;
 import com.programm.projects.core.IObjectBatch;
-import com.programm.projects.core.components.ColorMaterial;
-import com.programm.projects.core.components.IModelComponent;
-import com.programm.projects.core.components.Model;
+import com.programm.projects.plus.renderer.api.components.ColorMaterial;
+import com.programm.projects.plus.renderer.api.components.IModelComponent;
+import com.programm.projects.plus.renderer.api.components.Model;
 import com.programm.projects.core.components.Transform;
 import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 
@@ -41,39 +41,28 @@ class SwingCanvas extends Canvas {
 
 
             ColorMaterial colorMaterial = obj.getComponent(ColorMaterial.class);
-
-            if(colorMaterial != null){
-                g.setColor(colorMaterial.getColor());
-            }
-
             Model model = obj.getComponent(Model.class);
 
-            if(model != null){
+            if(model != null && colorMaterial != null){
                 IModelComponent modelComponent = model.getModelComponent();
-                Shape shape;
-
 
                 if(modelComponent instanceof SwingModelComponent) {
-                    shape = ((SwingModelComponent)modelComponent).getShape();
-                }
-                else {
-                    float[] vertices = model.getVertices();
-                    int length = vertices.length / 2;
+                    Shape shape = ((SwingModelComponent) modelComponent).getShape();
 
-                    int[] xPoints = new int[length];
-                    int[] yPoints = new int[length];
+                    Color fillColor = colorMaterial.getFillColor();
 
-                    for (int i = 0; i < length; i++) {
-                        xPoints[i] = (int) vertices[i * 2];
-                        yPoints[i] = (int) vertices[i * 2 + 1];
+                    if(fillColor != null){
+                        g2d.setColor(fillColor);
+                        g2d.fill(shape);
                     }
 
-                    shape = new Polygon(xPoints, yPoints, length);
-                    modelComponent = new SwingModelComponent(shape);
-                    model.setModelComponent(modelComponent);
-                }
+                    Color borderColor = colorMaterial.getBorderColor();
 
-                g2d.draw(shape);
+                    if(borderColor != null){
+                        g2d.setColor(borderColor);
+                        g2d.draw(shape);
+                    }
+                }
             }
 
             g2d.scale(1/scaleX, 1/scaleY);

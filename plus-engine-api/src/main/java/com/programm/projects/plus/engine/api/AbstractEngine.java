@@ -2,6 +2,7 @@ package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.core.IEngineContext;
 import com.programm.projects.core.IObjectBatch;
+import com.programm.projects.core.IRendererContext;
 import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
@@ -133,6 +134,11 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
     @Override
     public IEventHandler events() {
         return eventBus;
+    }
+
+    @Override
+    public IRendererContext rendererContext() {
+        return renderer;
     }
 
     @Override

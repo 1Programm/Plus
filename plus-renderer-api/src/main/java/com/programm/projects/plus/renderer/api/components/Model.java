@@ -1,10 +1,12 @@
-package com.programm.projects.core.components;
+package com.programm.projects.plus.renderer.api.components;
 
-import com.programm.projects.core.IComponent;
+import com.programm.projects.core.IEngineContext;
+import com.programm.projects.core.IRendererContext;
+import com.programm.projects.core.components.AbstractRendererComponent;
 import lombok.Getter;
 
 @Getter
-public class Model implements IComponent {
+public class Model extends AbstractRendererComponent {
 
     public static Model Rectangle(float width, float height){
         float w2 = width / 2f;
@@ -26,7 +28,7 @@ public class Model implements IComponent {
 
 
     /**
-     * Component will be set by the renderer after creating a specific Model from the engine
+     * Component will be set by the renderer after creating a specific Model from the engine in the onInit method
      */
     private IModelComponent modelComponent;
 
@@ -38,6 +40,12 @@ public class Model implements IComponent {
     public Model(float[] vertices, int[] indices) {
         this.vertices = vertices;
         this.indices = indices;
+    }
+
+    @Override
+    protected void onInit(IEngineContext context) {
+        IRendererContext rendererContext = context.rendererContext();
+        rendererContext.init(this);
     }
 
     public void setModelComponent(IModelComponent modelComponent) {
