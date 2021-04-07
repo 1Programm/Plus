@@ -1,14 +1,13 @@
 package main.components;
 
-import com.programm.projects.core.GameObject;
-import com.programm.projects.core.IEngineContext;
-import com.programm.projects.core.IGameContext;
-import com.programm.projects.core.IUpdatableComponent;
-import com.programm.projects.core.components.Mover;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IGameContext;
+import com.programm.projects.plus.core.IUpdatableComponent;
+import com.programm.projects.plus.core.components.Mover;
 import com.programm.projects.plus.maths.Vector2f;
 import com.programm.projects.plus.renderer.api.events.KeyPressedEvent;
 import com.programm.projects.plus.renderer.api.events.KeyReleasedEvent;
-import com.programm.projects.plus.renderer.api.events.MouseScrolledEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -1,11 +1,11 @@
 package main;
 
-import com.programm.projects.core.*;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
+import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.Model;
-import com.programm.projects.plus.engine.api.IEngine;
-import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import main.components.KeyboardController;
 

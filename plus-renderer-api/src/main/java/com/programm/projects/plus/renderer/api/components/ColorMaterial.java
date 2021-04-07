@@ -1,6 +1,6 @@
 package com.programm.projects.plus.renderer.api.components;
 
-import com.programm.projects.core.IComponent;
+import com.programm.projects.plus.core.IComponent;
 import lombok.Getter;
 
 import java.awt.*;

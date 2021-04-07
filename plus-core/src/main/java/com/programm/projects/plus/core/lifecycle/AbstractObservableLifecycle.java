@@ -1,4 +1,4 @@
-package com.programm.projects.core.lifecycle;
+package com.programm.projects.plus.core.lifecycle;
 
 import java.util.ArrayList;
 import java.util.List;

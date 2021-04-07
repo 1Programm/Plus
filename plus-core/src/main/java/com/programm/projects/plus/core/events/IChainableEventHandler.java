@@ -1,4 +1,4 @@
-package com.programm.projects.core.events;
+package com.programm.projects.plus.core.events;
 
 public interface IChainableEventHandler extends IEventHandler{
 

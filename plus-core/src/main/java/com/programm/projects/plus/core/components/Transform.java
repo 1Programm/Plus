@@ -1,6 +1,6 @@
-package com.programm.projects.core.components;
+package com.programm.projects.plus.core.components;
 
-import com.programm.projects.core.IComponent;
+import com.programm.projects.plus.core.IComponent;
 import com.programm.projects.plus.maths.Vector2f;
 import lombok.extern.slf4j.Slf4j;
 

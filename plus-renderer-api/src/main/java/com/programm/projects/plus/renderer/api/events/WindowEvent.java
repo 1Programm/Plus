@@ -1,6 +1,6 @@
 package com.programm.projects.plus.renderer.api.events;
 
-import com.programm.projects.core.events.IEvent;
+import com.programm.projects.plus.core.events.IEvent;
 import com.programm.projects.plus.renderer.api.IWindow;
 
 class WindowEvent implements IEvent {

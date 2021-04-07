@@ -1,6 +1,6 @@
 package com.programm.projects.plus.renderer.api.events;
 
-import com.programm.projects.core.events.ConsumableEvent;
+import com.programm.projects.plus.core.events.ConsumableEvent;
 import com.programm.projects.plus.renderer.api.IMouse;
 
 public class MouseEvent extends ConsumableEvent implements IMouse{

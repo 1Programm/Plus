@@ -1,4 +1,4 @@
-package com.programm.projects.core.lifecycle;
+package com.programm.projects.plus.core.lifecycle;
 
 public interface IChainLifecycle extends ILifecycle{
 

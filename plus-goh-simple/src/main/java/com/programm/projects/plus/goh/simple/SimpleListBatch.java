@@ -1,7 +1,7 @@
 package com.programm.projects.plus.goh.simple;
 
-import com.programm.projects.core.GameObject;
-import com.programm.projects.core.IObjectBatch;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IObjectBatch;
 
 import java.util.ArrayList;
 import java.util.Iterator;

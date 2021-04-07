@@ -1,11 +1,15 @@
-package com.programm.projects.core.events;
+package com.programm.projects.plus.engine.api.events;
+
+import com.programm.projects.plus.core.events.AbstractChainableEventHandler;
+import com.programm.projects.plus.core.events.EventListener;
+import com.programm.projects.plus.core.events.IEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventBus extends AbstractChainableEventHandler{
+public class EventBus extends AbstractChainableEventHandler {
 
     private final Map<Class<? extends IEvent>, List<EventListener<? extends IEvent>>> eventListenerMap = new HashMap<>();
 

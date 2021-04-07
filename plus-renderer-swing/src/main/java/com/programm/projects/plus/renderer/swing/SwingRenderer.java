@@ -1,18 +1,13 @@
 package com.programm.projects.plus.renderer.swing;
 
-import com.programm.projects.core.IEngineContext;
-import com.programm.projects.core.IGameContext;
-import com.programm.projects.core.components.IRenderComponent;
-import com.programm.projects.core.events.IEventHandler;
-import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
-import com.programm.projects.core.lifecycle.IChainableLifecycle;
-import com.programm.projects.core.IObjectBatch;
-import com.programm.projects.plus.renderer.api.IMouse;
+import com.programm.projects.plus.core.IGameContext;
+import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.components.IRenderComponent;
+import com.programm.projects.plus.core.events.IEventHandler;
+import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
+import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
-import com.programm.projects.plus.renderer.api.components.IModelComponent;
-import com.programm.projects.plus.renderer.api.components.Model;
-import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;

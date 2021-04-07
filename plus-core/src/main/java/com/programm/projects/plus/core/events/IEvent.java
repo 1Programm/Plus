@@ -1,4 +1,4 @@
-package com.programm.projects.core.events;
+package com.programm.projects.plus.core.events;
 
 public interface IEvent {
 
@@ -8,6 +8,10 @@ public interface IEvent {
      */
     default boolean handle() { return true; }
 
+    /**
+     * Mark this event as consumed.
+     * If this event can be consumed {@link IEvent#handle()} should return false.
+     */
     default void consume() { }
 
 }

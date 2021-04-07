@@ -1,7 +1,7 @@
 package com.programm.projects.plus.engine.api;
 
-import com.programm.projects.core.GameObject;
-import com.programm.projects.core.IGameContext;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IGameContext;
 
 public class GameStackContext implements IGameContext {
 

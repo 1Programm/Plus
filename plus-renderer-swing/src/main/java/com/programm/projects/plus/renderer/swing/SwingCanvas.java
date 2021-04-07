@@ -1,11 +1,11 @@
 package com.programm.projects.plus.renderer.swing;
 
-import com.programm.projects.core.GameObject;
-import com.programm.projects.core.IObjectBatch;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.IModelComponent;
 import com.programm.projects.plus.renderer.api.components.Model;
-import com.programm.projects.core.components.Transform;
+import com.programm.projects.plus.core.components.Transform;
 import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 
 import java.awt.*;

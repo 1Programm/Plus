@@ -1,13 +1,13 @@
 package com.programm.projects.plus.engine.api;
 
-import com.programm.projects.core.IEngineContext;
-import com.programm.projects.core.IObjectBatch;
-import com.programm.projects.core.IRendererContext;
-import com.programm.projects.core.events.EventBus;
-import com.programm.projects.core.events.IEventHandler;
-import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
-import com.programm.projects.core.lifecycle.IChainableLifecycle;
+import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.IRenderContext;
+import com.programm.projects.plus.core.events.IEventHandler;
+import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
+import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
+import com.programm.projects.plus.engine.api.events.EventBus;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
@@ -140,7 +140,7 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
     }
 
     @Override
-    public IRendererContext rendererContext() {
+    public IRenderContext rendererContext() {
         return renderer;
     }
 

@@ -1,12 +1,12 @@
 package com.programm.projects.plus.renderer.api.components;
 
-import com.programm.projects.core.IEngineContext;
-import com.programm.projects.core.IRendererContext;
-import com.programm.projects.core.components.AbstractRendererComponent;
+import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IRenderContext;
+import com.programm.projects.plus.core.components.IRenderComponent;
 import lombok.Getter;
 
 @Getter
-public class Model extends AbstractRendererComponent {
+public class Model implements IRenderComponent {
 
     public static Model Rectangle(float width, float height){
         float w2 = width / 2f;
@@ -43,8 +43,8 @@ public class Model extends AbstractRendererComponent {
     }
 
     @Override
-    protected void onInit(IEngineContext context) {
-        IRendererContext rendererContext = context.rendererContext();
+    public void init(IEngineContext context) {
+        IRenderContext rendererContext = context.rendererContext();
         rendererContext.init(this);
     }
 

@@ -1,4 +1,4 @@
-package com.programm.projects.core.events;
+package com.programm.projects.plus.core.events;
 
 import java.util.ArrayList;
 import java.util.List;

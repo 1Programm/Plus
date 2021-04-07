@@ -40,8 +40,6 @@ public class TestRunLoop implements IRunLoop {
     }
 
     private void run() {
-        log.info("Starting Test Run Loop...");
-
         int millis = 1000 / fps;
 
         try {

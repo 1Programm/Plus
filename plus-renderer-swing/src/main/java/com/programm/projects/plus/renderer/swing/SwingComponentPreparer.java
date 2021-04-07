@@ -1,19 +1,17 @@
 package com.programm.projects.plus.renderer.swing;
 
-import com.programm.projects.core.IRendererContext;
-import com.programm.projects.core.components.IRenderComponent;
+import com.programm.projects.plus.core.IRenderContext;
+import com.programm.projects.plus.core.components.IRenderComponent;
 import com.programm.projects.plus.renderer.api.components.IModelComponent;
 import com.programm.projects.plus.renderer.api.components.Model;
 import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 
 import java.awt.*;
 
-public class SwingComponentPreparer implements IRendererContext {
+public class SwingComponentPreparer implements IRenderContext {
 
     @Override
     public void init(IRenderComponent component) {
-        if(component.isInitialized()) return;
-
         if(component instanceof Model){
             prepareModel((Model)component);
         }

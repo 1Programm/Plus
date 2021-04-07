@@ -1,6 +1,6 @@
 package com.programm.projects.plus.renderer.swing;
 
-import com.programm.projects.core.events.IEventDispatcher;
+import com.programm.projects.plus.core.events.IEventDispatcher;
 import com.programm.projects.plus.renderer.api.IWindow;
 import com.programm.projects.plus.renderer.api.events.*;
 import lombok.extern.slf4j.Slf4j;

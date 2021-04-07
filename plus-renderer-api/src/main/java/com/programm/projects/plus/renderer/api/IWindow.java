@@ -1,8 +1,6 @@
 package com.programm.projects.plus.renderer.api;
 
-import com.programm.projects.core.lifecycle.ILifecycle;
-
-import java.util.function.Consumer;
+import com.programm.projects.plus.core.lifecycle.ILifecycle;
 
 public interface IWindow extends ILifecycle {
 

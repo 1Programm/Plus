@@ -1,9 +1,9 @@
 package com.programm.projects.plus.goh.simple;
 
-import com.programm.projects.core.GameObject;
-import com.programm.projects.core.IEngineContext;
-import com.programm.projects.core.IGameContext;
-import com.programm.projects.core.IObjectBatch;
+import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IGameContext;
+import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 

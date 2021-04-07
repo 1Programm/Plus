@@ -1,7 +1,7 @@
-package com.programm.projects.core;
+package com.programm.projects.plus.core;
 
-import com.programm.projects.core.components.Mover;
-import com.programm.projects.core.components.Transform;
+import com.programm.projects.plus.core.components.Mover;
+import com.programm.projects.plus.core.components.Transform;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

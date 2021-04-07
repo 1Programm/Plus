@@ -1,4 +1,4 @@
-package com.programm.projects.core;
+package com.programm.projects.plus.core;
 
 public interface IUpdatable {
 
