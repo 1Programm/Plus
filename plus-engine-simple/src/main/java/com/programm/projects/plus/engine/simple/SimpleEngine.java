@@ -1,4 +1,4 @@
-package main;
+package com.programm.projects.plus.engine.simple;
 
 import com.programm.projects.plus.engine.api.AbstractEngine;
 import com.programm.projects.plus.engine.api.EnginePhase;
@@ -17,7 +17,7 @@ public class SimpleEngine extends AbstractEngine {
     private IGameObjectHandler tmpGOH;
 
     public SimpleEngine() {
-        this.tmpRunLoop = new TestRunLoop(30);
+        this.tmpRunLoop = new SimpleRunLoop(60);
         this.tmpRenderer = new SwingRenderer();
         this.tmpGOH = new SimpleListGOH();
     }
