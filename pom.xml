@@ -16,6 +16,7 @@
         <module>plus-goh-api</module>
         <module>plus-renderer-api</module>
         <module>plus-renderer-swing</module>
+        <module>plus-goh-simple</module>
     </modules>
 
     <properties>
