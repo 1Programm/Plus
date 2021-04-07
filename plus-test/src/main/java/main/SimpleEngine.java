@@ -10,6 +10,6 @@ public class SimpleEngine extends AbstractEngine {
     public SimpleEngine() {
         setRunLoop(new TestRunLoop(30));
         setRenderer(new SwingRenderer());
-        setGOH(new TestGOH());
+        setGOH(new SimpleListGOH());
     }
 }
