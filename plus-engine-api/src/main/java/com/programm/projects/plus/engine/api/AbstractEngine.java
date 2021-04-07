@@ -7,8 +7,7 @@ import com.programm.projects.core.events.EventBus;
 import com.programm.projects.core.events.IEventHandler;
 import com.programm.projects.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.core.lifecycle.IChainableLifecycle;
-import com.programm.projects.plus.engine.api.events.EngineShutdownEvent;
-import com.programm.projects.plus.engine.api.events.EngineStartupEvent;
+import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
@@ -39,7 +38,7 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
      */
     @Override
     protected void onStartup() {
-        phase = EnginePhase.STARTING;
+        changePhase(EnginePhase.STARTING);
         log.info("[Startup] - Engine");
 
         events().listenFor(WindowCloseEvent.class, this::onWindowClose);
@@ -50,28 +49,32 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
         goh.setup(this);
 
 
-        phase = EnginePhase.PREPARED;
+        changePhase(EnginePhase.PREPARED);
     }
 
     @Override
     protected void onAfterStartup() {
-        phase = EnginePhase.STARTED;
-        events().dispatch(new EngineStartupEvent(this));
+        changePhase(EnginePhase.STARTED);
     }
 
     @Override
     protected void onBeforeShutdown() {
-        phase = EnginePhase.CLEANUP;
-        events().dispatch(new EngineShutdownEvent(this));
+        changePhase(EnginePhase.CLEANUP);
     }
 
     @Override
     protected void onShutdown() {
         log.info("[Shutdown] - Engine");
-        phase = EnginePhase.SHUTDOWN;
+        changePhase(EnginePhase.SHUTDOWN);
     }
 
     //------------------
+
+    private void changePhase(EnginePhase phase){
+        EnginePhase before = this.phase;
+        this.phase = phase;
+        events().dispatch(new EnginePhaseEvent(this, before));
+    }
 
     private void onWindowClose(WindowCloseEvent e){
         stopRequest = true;
