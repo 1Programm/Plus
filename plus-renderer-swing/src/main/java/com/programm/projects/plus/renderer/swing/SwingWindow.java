@@ -46,12 +46,11 @@ public class SwingWindow implements IWindow, ComponentListener, WindowListener, 
 
     @Override
     public void startup() {
-        log.info("[Startup] Swing Window");
+
     }
 
     @Override
     public void shutdown() {
-        log.info("[Shutdown] Swing Window");
         frame.dispose();
     }
 

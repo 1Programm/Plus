@@ -14,4 +14,10 @@ public interface IEvent {
      */
     default void consume() { }
 
+    /**
+     * Getter for immediate flag
+     * @return true if this event should be handled immediately and not on pollEvents
+     */
+    default boolean immediate(){ return false; }
+
 }

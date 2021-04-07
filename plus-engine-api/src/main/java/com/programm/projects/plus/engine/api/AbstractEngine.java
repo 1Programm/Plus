@@ -7,8 +7,9 @@ import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
-import com.programm.projects.plus.engine.api.events.EventBus;
+import com.programm.projects.plus.engine.api.events.EventStack;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
+import com.programm.projects.plus.goh.api.ISceneInitializer;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
@@ -18,11 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle, IEngineContext {
 
     private final GameStackContext gameContext = new GameStackContext();
-    private final EventBus eventBus = new EventBus();
+    private final EventStack eventStack = new EventStack();
 
     protected IRunLoop runLoop;
     protected IRenderer renderer;
     protected IGameObjectHandler goh;
+
+    private ISceneInitializer sceneInitializer;
 
     protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
@@ -50,6 +53,10 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         this.runLoop = initRunLoop();
         this.goh = initGOH();
         this.renderer = initRenderer();
+
+        //LOAD OBJECTS
+        log.debug("Load objects...");
+        sceneInitializer.init(goh::add);
 
         //ADD SUBSYSTEMS
         addLifecycle(runLoop);
@@ -100,6 +107,8 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
             return;
         }
 
+        eventStack.pollEvents();
+
         //Update all objects
         goh.update(gameContext);
 
@@ -116,7 +125,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
     @Override
     public IEventHandler events() {
-        return eventBus;
+        return eventStack;
     }
 
     @Override
@@ -130,8 +139,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     @Override
-    public IGameObjectHandler getGOH() {
-        return goh;
+    public void setSceneInitializer(ISceneInitializer sceneInitializer) {
+        this.sceneInitializer = sceneInitializer;
     }
-
 }

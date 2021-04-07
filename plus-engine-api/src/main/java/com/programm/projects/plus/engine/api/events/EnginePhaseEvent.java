@@ -15,4 +15,9 @@ public class EnginePhaseEvent extends EngineEvent{
         this.before = before;
         this.phase = engine.phase();
     }
+
+    @Override
+    public boolean immediate() {
+        return true;
+    }
 }

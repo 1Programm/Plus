@@ -45,7 +45,7 @@ public class SimpleListGOH implements IGameObjectHandler {
     }
 
     @Override
-    public void addObject(GameObject object) {
+    public void add(GameObject object) {
         objects.add(object);
         batch.add(object);
 

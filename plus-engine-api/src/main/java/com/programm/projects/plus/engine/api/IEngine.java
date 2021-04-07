@@ -5,6 +5,7 @@ import com.programm.projects.plus.core.lifecycle.ILifecycle;
 import com.programm.projects.plus.core.lifecycle.IObservableLifecycle;
 import com.programm.projects.plus.engine.api.exceptions.EngineRuntimeException;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
+import com.programm.projects.plus.goh.api.ISceneInitializer;
 import com.programm.projects.plus.renderer.api.IRenderer;
 
 /**
@@ -12,33 +13,6 @@ import com.programm.projects.plus.renderer.api.IRenderer;
  * Extends from {@link IObservableLifecycle} and {@link IEngineContext}
  */
 public interface IEngine extends IObservableLifecycle, IEngineContext {
-
-//    //Setters for the subsystems
-//    //Methods should throw an EngineRuntimeException if executed and not in phase ALIVE
-//
-//    /**
-//     * Set the run - loop - subsystem
-//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-//     * @param runLoop the run loop that should be used by the engine
-//     */
-//    void setRunLoop(IRunLoop runLoop);
-//
-//    /**
-//     * Set the game - object - handler - subsystem
-//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-//     * @param goh the object handler that should be used by the engine
-//     */
-//    void setGOH(IGameObjectHandler goh);
-//
-//    /**
-//     * Set the renderer - subsystem
-//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-//     * @param renderer the rendering engine that should be used by the engine
-//     */
-//    void setRenderer(IRenderer renderer);
-
-
-
 
     /**
      * Method to retrieve the engine phase
@@ -78,6 +52,6 @@ public interface IEngine extends IObservableLifecycle, IEngineContext {
     EnginePhase phase();
 
 
-    //Temporary - replace by Initializer - System
-    IGameObjectHandler getGOH();
+    //TEMPORARY
+    void setSceneInitializer(ISceneInitializer sceneInitializer);
 }
