@@ -3,14 +3,25 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.lifecycle.ILifecycle;
 import com.programm.projects.plus.core.lifecycle.IObservableLifecycle;
-import com.programm.projects.plus.engine.api.exceptions.EngineRuntimeException;
-import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.goh.api.ISceneInitializer;
-import com.programm.projects.plus.renderer.api.IRenderer;
 
 /**
  * An API representation of an Engine
  * Extends from {@link IObservableLifecycle} and {@link IEngineContext}
+ *
+ *
+ * Should be used like the following example:
+ *
+ * <code>
+ *     IEngine engine = ...;
+ *
+ *     engine.events().listenFor(..., ...); //Listen for some event
+ *     engine.setSceneInitializer(...);     //Set the scene initializer where objects can be created
+ *
+ *     engine.startup();
+ *
+ * </code>
+ *
  */
 public interface IEngine extends IObservableLifecycle, IEngineContext {
 
