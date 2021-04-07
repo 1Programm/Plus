@@ -15,14 +15,14 @@ import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle, IEngineContext {
+public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle, IEngineContext {
 
     private final GameStackContext gameContext = new GameStackContext();
     private final EventBus eventBus = new EventBus();
 
     protected IRunLoop runLoop;
-    protected IGameObjectHandler goh;
     protected IRenderer renderer;
+    protected IGameObjectHandler goh;
 
     protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
@@ -32,6 +32,9 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
     //TEMPORARY:
     private final WindowInfo windowInfo = new WindowInfo("Plus Engine", 600, 500);
 
+    protected abstract IRunLoop initRunLoop();
+    protected abstract IRenderer initRenderer();
+    protected abstract IGameObjectHandler initGOH();
 
     /*
      * -- LIFECYCLE METHODS --
@@ -42,6 +45,17 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
         log.info("[Startup] - Engine");
 
         events().listenFor(WindowCloseEvent.class, this::onWindowClose);
+
+        //INIT SYSTEMS
+        this.runLoop = initRunLoop();
+        this.goh = initGOH();
+        this.renderer = initRenderer();
+
+        //ADD SUBSYSTEMS
+        addLifecycle(runLoop);
+        addLifecycle(renderer);
+        addLifecycle(goh);
+
 
         //[PREPARE] PHASE
         runLoop.setup(this::update);
@@ -98,41 +112,7 @@ public class AbstractEngine extends AbstractObservableLifecycle implements IEngi
     }
 
 
-
-
-    /*
-     * GETTER AND SETTER
-     */
-
-    @Override
-    public void setRunLoop(IRunLoop runLoop) {
-        if(this.runLoop != null){
-            removeLifecycle(this.runLoop);
-        }
-
-        this.runLoop = runLoop;
-        addLifecycle(runLoop);
-    }
-
-    @Override
-    public void setGOH(IGameObjectHandler goh) {
-        if(this.goh != null){
-            removeLifecycle(this.goh);
-        }
-
-        this.goh = goh;
-        addLifecycle(goh);
-    }
-
-    @Override
-    public void setRenderer(IRenderer renderer) {
-        if(this.renderer != null){
-            removeLifecycle(this.renderer);
-        }
-
-        this.renderer = renderer;
-        addLifecycle(renderer);
-    }
+    // OTHER METHODS
 
     @Override
     public IEventHandler events() {

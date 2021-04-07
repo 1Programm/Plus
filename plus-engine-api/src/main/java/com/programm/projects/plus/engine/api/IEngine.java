@@ -13,29 +13,29 @@ import com.programm.projects.plus.renderer.api.IRenderer;
  */
 public interface IEngine extends IObservableLifecycle, IEngineContext {
 
-    //Setters for the subsystems
-    //Methods should throw an EngineRuntimeException if executed and not in phase ALIVE
-
-    /**
-     * Set the run - loop - subsystem
-     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-     * @param runLoop the run loop that should be used by the engine
-     */
-    void setRunLoop(IRunLoop runLoop);
-
-    /**
-     * Set the game - object - handler - subsystem
-     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-     * @param goh the object handler that should be used by the engine
-     */
-    void setGOH(IGameObjectHandler goh);
-
-    /**
-     * Set the renderer - subsystem
-     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
-     * @param renderer the rendering engine that should be used by the engine
-     */
-    void setRenderer(IRenderer renderer);
+//    //Setters for the subsystems
+//    //Methods should throw an EngineRuntimeException if executed and not in phase ALIVE
+//
+//    /**
+//     * Set the run - loop - subsystem
+//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
+//     * @param runLoop the run loop that should be used by the engine
+//     */
+//    void setRunLoop(IRunLoop runLoop);
+//
+//    /**
+//     * Set the game - object - handler - subsystem
+//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
+//     * @param goh the object handler that should be used by the engine
+//     */
+//    void setGOH(IGameObjectHandler goh);
+//
+//    /**
+//     * Set the renderer - subsystem
+//     * Should throw an {@link EngineRuntimeException} if Engine is not in {@link EnginePhase#ALIVE} phase
+//     * @param renderer the rendering engine that should be used by the engine
+//     */
+//    void setRenderer(IRenderer renderer);
 
 
 
