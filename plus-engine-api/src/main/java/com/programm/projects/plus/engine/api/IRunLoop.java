@@ -6,4 +6,6 @@ public interface IRunLoop extends ILifecycle {
 
     void setup(Runnable updateCallback);
 
+    IRunLoopInfo info();
+
 }
