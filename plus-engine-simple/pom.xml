@@ -20,6 +20,11 @@
 
         <dependency>
             <groupId>com.programm.projects</groupId>
+            <artifactId>plus-resource-simple</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.programm.projects</groupId>
             <artifactId>plus-goh-simple</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -27,6 +32,13 @@
             <groupId>com.programm.projects</groupId>
             <artifactId>plus-renderer-swing</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
 

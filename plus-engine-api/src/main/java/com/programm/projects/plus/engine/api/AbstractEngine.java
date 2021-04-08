@@ -13,6 +13,7 @@ import com.programm.projects.plus.goh.api.ISceneInitializer;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
+import com.programm.projects.plus.resource.api.IResourceManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,6 +22,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     private final GameStackContext gameContext = new GameStackContext();
     private final EventStack eventStack = new EventStack();
 
+    protected IResourceManager resourceManager;
     protected IRunLoop runLoop;
     protected IRenderer renderer;
     protected IGameObjectHandler goh;
@@ -35,6 +37,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     //TEMPORARY:
     private final WindowInfo windowInfo = new WindowInfo("Plus Engine", 600, 500);
 
+    protected abstract IResourceManager initResourceManager();
     protected abstract IRunLoop initRunLoop();
     protected abstract IRenderer initRenderer();
     protected abstract IGameObjectHandler initGOH();
@@ -44,21 +47,28 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
      */
     @Override
     protected void onStartup() {
-        changePhase(EnginePhase.STARTING);
         log.info("[Startup] - Engine");
+        changePhase(EnginePhase.STARTING);
 
         events().listenFor(WindowCloseEvent.class, this::onWindowClose);
 
         //INIT SYSTEMS
+        this.resourceManager = initResourceManager();
         this.runLoop = initRunLoop();
         this.goh = initGOH();
         this.renderer = initRenderer();
+
+
+        //LOAD RESOURCES
+        resourceManager.loadStaticResources();
+
 
         //LOAD OBJECTS
         log.debug("Load objects...");
         sceneInitializer.init(goh::add);
 
         //ADD SUBSYSTEMS
+        addLifecycle(resourceManager);
         addLifecycle(runLoop);
         addLifecycle(renderer);
         addLifecycle(goh);
@@ -76,6 +86,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     @Override
     protected void onAfterStartup() {
         changePhase(EnginePhase.STARTED);
+        EngineStaticLogger.logStartup(resourceManager);
     }
 
     @Override
@@ -87,6 +98,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     protected void onShutdown() {
         log.info("[Shutdown] - Engine");
         changePhase(EnginePhase.SHUTDOWN);
+        EngineStaticLogger.logShutdown(resourceManager);
     }
 
     //------------------

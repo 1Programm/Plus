@@ -7,19 +7,28 @@ import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.goh.simple.SimpleListGOH;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.swing.SwingRenderer;
+import com.programm.projects.plus.resource.api.IResourceManager;
+import com.programm.projects.plus.resources.simple.SimpleResourceLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SimpleEngine extends AbstractEngine {
 
+    private IResourceManager resourceLoader;
     private IRunLoop tmpRunLoop;
     private IRenderer tmpRenderer;
     private IGameObjectHandler tmpGOH;
 
     public SimpleEngine() {
+        this.resourceLoader = new SimpleResourceLoader();
         this.tmpRunLoop = new SimpleRunLoop(60);
         this.tmpRenderer = new SwingRenderer();
         this.tmpGOH = new SimpleListGOH();
+    }
+
+    @Override
+    protected IResourceManager initResourceManager() {
+        return resourceLoader;
     }
 
     @Override
@@ -49,6 +58,11 @@ public class SimpleEngine extends AbstractEngine {
         }
 
         return false;
+    }
+
+    public void setResourceLoader(IResourceManager resourceLoader){
+        if(testPhase()) return;
+        this.resourceLoader = resourceLoader;
     }
 
     public void setRunLoop(IRunLoop runLoop) {

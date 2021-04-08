@@ -16,10 +16,6 @@ import java.awt.*;
 @Slf4j
 public class Main {
 
-    private static void onPhaseChange(EnginePhaseEvent e){
-        log.info("Before: {}, Phase: {}", e.getBefore(), e.getPhase());
-    }
-
     private static void onKeyPressed(KeyPressedEvent e){
         log.info("Key: {}.", e.getKeyCode());
     }
@@ -39,10 +35,11 @@ public class Main {
         IEngine engine = new SimpleEngine();
 
         engine.setSceneInitializer(Main::sceneInit);
-        engine.events().listenFor(EnginePhaseEvent.class, Main::onPhaseChange);
         engine.events().listenFor(KeyPressedEvent.class, Main::onKeyPressed);
 
         engine.startup();
+
+        log.info("TEST");
     }
 
 }

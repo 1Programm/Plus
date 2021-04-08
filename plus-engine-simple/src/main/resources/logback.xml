@@ -1,11 +1,30 @@
 <configuration>
+    <property resource="engine-default.properties"/>
+    <property resource="engine.properties"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>[%-5level] %-40([%-10thread] %class{0}.%M) > %msg%n</pattern>
+<!--        <encoder>-->
+<!--            <pattern>[%-5level] %-40([%-10thread] %class{0}.%M) > %msg%n</pattern>-->
+<!--        </encoder>-->
+        <encoder class="com.programm.projects.plus.engine.simple.logging.MultiLayoutPattern">
+            <pattern>${plus.logging.client.pattern}</pattern>
+
+            <rule>
+                <logger>com.programm.projects.plus.engine.api.EngineStaticLogger</logger>
+                <pattern>%msg%n</pattern>
+            </rule>
+            <rule>
+                <logger>com.programm.projects.plus</logger>
+                <pattern>${plus.logging.engine.pattern}</pattern>
+            </rule>
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <logger name="com.programm.projects.plus" level="${plus.logging.engine.level}" />
+
+    <logger name="com.programm.projects.plus.engine.api.EngineStaticLogger" level="INFO" />
+
+    <root level="${plus.logging.client.level}">
         <appender-ref ref="STDOUT" />
     </root>
 
