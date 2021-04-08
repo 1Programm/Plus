@@ -6,6 +6,7 @@ import com.programm.projects.plus.core.IRenderContext;
 import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
+import com.programm.projects.plus.core.resource.IResources;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import com.programm.projects.plus.engine.api.events.EventStack;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
@@ -138,6 +139,11 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     @Override
     public IEventHandler events() {
         return eventStack;
+    }
+
+    @Override
+    public IResources resources() {
+        return resourceManager;
     }
 
     @Override

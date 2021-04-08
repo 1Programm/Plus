@@ -1,7 +1,6 @@
 package com.programm.projects.plus.resources.simple;
 
-import com.programm.projects.plus.resource.api.MapResource;
-import com.programm.projects.plus.resource.api.Resource;
+import com.programm.projects.plus.core.resource.Resource;
 import com.programm.projects.plus.resource.api.ValueResource;
 
 import java.io.*;

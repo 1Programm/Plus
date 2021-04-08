@@ -1,7 +1,7 @@
 package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.plus.resource.api.IResourceManager;
-import com.programm.projects.plus.resource.api.Resource;
+import com.programm.projects.plus.core.resource.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

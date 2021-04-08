@@ -1,7 +1,8 @@
 package com.programm.projects.plus.resources.simple;
 
+import com.programm.projects.plus.resource.api.EmptyResource;
 import com.programm.projects.plus.resource.api.IResourceManager;
-import com.programm.projects.plus.resource.api.Resource;
+import com.programm.projects.plus.core.resource.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -42,6 +43,8 @@ public class SimpleResourceLoader implements IResourceManager {
             return staticRes;
         }
 
-        return null;
+
+        //return empty resource so no null pointer is thrown
+        return new EmptyResource();
     }
 }

@@ -1,6 +1,8 @@
 package com.programm.projects.plus.resource.api;
 
 
+import com.programm.projects.plus.core.resource.Resource;
+
 import java.util.Map;
 
 public class MapResource implements DefaultValuesResource{

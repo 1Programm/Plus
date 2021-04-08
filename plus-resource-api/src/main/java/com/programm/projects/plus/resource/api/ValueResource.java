@@ -1,12 +1,13 @@
 package com.programm.projects.plus.resource.api;
 
+import com.programm.projects.plus.core.resource.Resource;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ValueResource implements Resource{
+public class ValueResource implements Resource {
 
     public static ValueResource OfUndefined(Object value){
         Class<?> cls = value.getClass();

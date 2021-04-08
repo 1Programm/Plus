@@ -1,4 +1,4 @@
-package com.programm.projects.plus.resource.api;
+package com.programm.projects.plus.core.resource;
 
 public interface Resource {
 
@@ -8,6 +8,8 @@ public interface Resource {
     Long asLong();
     Float asFloat();
     Double asDouble();
+
+    default boolean isEmptyResource(){ return false; }
 
 
     //DEFAULTS

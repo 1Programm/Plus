@@ -1,6 +1,8 @@
 package com.programm.projects.plus.resource.api;
 
-public interface DefaultValuesResource extends Resource{
+import com.programm.projects.plus.core.resource.Resource;
+
+public interface DefaultValuesResource extends Resource {
 
     @Override
     default String asString() {

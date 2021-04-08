@@ -1,8 +1,8 @@
 package main;
 
 import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.resource.Resource;
 import com.programm.projects.plus.engine.api.IEngine;
-import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import com.programm.projects.plus.engine.simple.SimpleEngine;
 import com.programm.projects.plus.goh.api.IObjectConsumer;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
@@ -38,8 +38,6 @@ public class Main {
         engine.events().listenFor(KeyPressedEvent.class, Main::onKeyPressed);
 
         engine.startup();
-
-        log.info("TEST");
     }
 
 }
