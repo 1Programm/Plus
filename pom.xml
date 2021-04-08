@@ -18,6 +18,7 @@
         <module>plus-renderer-swing</module>
         <module>plus-goh-simple</module>
         <module>plus-engine-simple</module>
+        <module>plus-resource-api</module>
     </modules>
 
     <properties>
