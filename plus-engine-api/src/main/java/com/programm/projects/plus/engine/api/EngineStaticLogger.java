@@ -16,7 +16,7 @@ class EngineStaticLogger {
         if(resource != null){
             String message = resource.asString(DEFAULTS_DEFAULT_START_MESSAGE);
             message = formatMessage(message);
-            log.info(message);
+            log.info(message + "\n");
         }
     }
 
@@ -26,7 +26,7 @@ class EngineStaticLogger {
         if(resource != null){
             String message = resource.asString(DEFAULTS_DEFAULT_STOP_MESSAGE);
             message = formatMessage(message);
-            log.info(message);
+            log.info("\n" + message);
         }
     }
 

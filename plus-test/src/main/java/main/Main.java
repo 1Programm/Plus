@@ -40,7 +40,7 @@ public class Main extends Scene {
 
         objects.add(GameObject.create()
                 .setPosition(200, 200)
-                .setScale(1, 1)
+                .setScale(3, 1)
                 .add(new ColorMaterial(Color.BLACK))
                 .add(Model.Circle(50))
                 .build());
