@@ -1,4 +1,4 @@
-package main.components;
+package com.programm.projects.plus.components.basic;
 
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IEngineContext;

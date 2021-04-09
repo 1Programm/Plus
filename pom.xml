@@ -20,6 +20,7 @@
         <module>plus-engine-simple</module>
         <module>plus-resource-api</module>
         <module>plus-resource-simple</module>
+        <module>plus-components-basic</module>
     </modules>
 
     <properties>
