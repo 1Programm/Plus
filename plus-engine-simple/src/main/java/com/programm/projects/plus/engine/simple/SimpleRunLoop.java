@@ -1,7 +1,10 @@
 package com.programm.projects.plus.engine.simple;
 
+import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.engine.api.EnginePhase;
 import com.programm.projects.plus.engine.api.IRunLoop;
 import com.programm.projects.plus.engine.api.IRunLoopInfo;
+import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,8 +24,17 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
     }
 
     @Override
-    public void setup(Runnable updateCallback) {
+    public void setup(Runnable updateCallback, IEngineContext context) {
         this.updateCallback = updateCallback;
+
+        context.events().listenFor(EnginePhaseEvent.class, this::onEnginePhaseChanged);
+    }
+
+    private void onEnginePhaseChanged(EnginePhaseEvent event){
+        if(event.getPhase() == EnginePhase.STARTED){
+            log.info("[Startup] - Simple Run Loop Thread");
+            thread.start();
+        }
     }
 
     @Override
@@ -34,7 +46,6 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
         }
 
         running = true;
-        thread.start();
     }
 
     @Override
@@ -68,16 +79,17 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
                 this.frames = 0;
                 this.updates = 0;
             }
-
-//            try {
-//                Thread.sleep(10);
-//            } catch (InterruptedException ignored) { }
         }
     }
 
     @Override
     public IRunLoopInfo info() {
         return this;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running;
     }
 
     @Override

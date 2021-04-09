@@ -10,7 +10,6 @@ import com.programm.projects.plus.core.resource.IResources;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import com.programm.projects.plus.engine.api.events.EventStack;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
-import com.programm.projects.plus.goh.api.ISceneInitializer;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import com.programm.projects.plus.renderer.api.WindowInfo;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
@@ -28,7 +27,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     protected IRenderer renderer;
     protected IGameObjectHandler goh;
 
-    private ISceneInitializer sceneInitializer;
+    private Scene scene;
 
     protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
@@ -63,11 +62,6 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         //LOAD RESOURCES
         resourceManager.loadStaticResources();
 
-
-        //LOAD OBJECTS
-        log.debug("Load objects...");
-        sceneInitializer.init(goh::add);
-
         //ADD SUBSYSTEMS
         addLifecycle(resourceManager);
         addLifecycle(runLoop);
@@ -76,16 +70,19 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
 
         //[PREPARE] PHASE
-        runLoop.setup(this::update);
+        runLoop.setup(this::update, this);
         renderer.setup(events(), windowInfo);
         goh.setup(this);
 
+        scene.init(goh, renderer, this);
 
         changePhase(EnginePhase.PREPARED);
     }
 
     @Override
     protected void onAfterStartup() {
+        scene.load();
+
         changePhase(EnginePhase.STARTED);
         EngineStaticLogger.logStartup(resourceManager);
     }
@@ -157,7 +154,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     @Override
-    public void setSceneInitializer(ISceneInitializer sceneInitializer) {
-        this.sceneInitializer = sceneInitializer;
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 }

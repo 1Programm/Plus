@@ -18,6 +18,8 @@ public class GameObject implements IUpdatable, IInitializable{
         private final Map<Class<? extends IComponent>, IComponent> componentMap = new HashMap<>();
         private final List<IUpdatableComponent> updatableComponents = new ArrayList<>();
 
+        private final List<AbstractComponent> abstractComponents = new ArrayList<>();
+
         private GameObjectBuilder(){
             this.x = 0;
             this.y = 0;
@@ -57,6 +59,10 @@ public class GameObject implements IUpdatable, IInitializable{
                 log.warn("Component [{}] is already set!", component.getClass());
             }
 
+            if(component instanceof AbstractComponent){
+                abstractComponents.add((AbstractComponent) component);
+            }
+
             return this;
         }
 
@@ -67,7 +73,11 @@ public class GameObject implements IUpdatable, IInitializable{
             add(transform);
             add(mover);
 
-            return new GameObject(transform, mover, componentMap, updatableComponents);
+            GameObject object = new GameObject(transform, mover, componentMap, updatableComponents);
+
+            abstractComponents.forEach(c -> c.setParent(object));
+
+            return object;
         }
 
     }

@@ -2,6 +2,7 @@ package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.plus.core.IGameContext;
 import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.components.IRenderComponent;
 import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
@@ -19,11 +20,18 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     private SwingWindow window;
     private IObjectBatch renderableBatch;
 
+    private Camera camera;
+
     // LIFECYCLE METHODS
     @Override
     public void setup(IEventHandler eventHandler, WindowInfo windowInfo) {
         window = new SwingWindow(windowInfo.getTitle(), windowInfo.getWidth(), windowInfo.getHeight(), eventHandler);
         addLifecycle(window);
+    }
+
+    @Override
+    public void addCamera(Camera camera) {
+        this.camera = camera;
     }
 
     @Override
@@ -50,7 +58,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     @Override
     public void update(IGameContext context) {
         if(window == null) return;
-        window.canvas.render(renderableBatch, Color.WHITE);
+        window.canvas.render(renderableBatch, Color.WHITE, camera);
     }
 
     @Override

@@ -2,18 +2,20 @@ package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
-import com.programm.projects.plus.renderer.api.components.IModelComponent;
 import com.programm.projects.plus.renderer.api.components.Model;
+import com.programm.projects.plus.renderer.api.components.IRenderModel;
 import com.programm.projects.plus.core.components.Transform;
 import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.List;
 
 class SwingCanvas extends Canvas {
 
-    public void render(IObjectBatch renderableBatch, Color backgroundColor){
+    public void render(IObjectBatch renderableBatch, Color backgroundColor, Camera camera){
         BufferStrategy bs = getBufferStrategy();
 
         if(bs == null){
@@ -28,26 +30,32 @@ class SwingCanvas extends Canvas {
 
         Graphics2D g2d = (Graphics2D)g;
 
+        float camX = camera.getX();
+        float camY = camera.getY();
+        g2d.translate(-camX, -camY);
+
         g2d.setColor(Color.BLACK);
         for(GameObject obj : renderableBatch){
-            Transform transform = obj.getTransform();
-            int x = (int)transform.getX();
-            int y = (int)transform.getY();
-            float scaleX = transform.getXScale();
-            float scaleY = transform.getYScale();
-
-            g2d.translate(x, y);
-            g2d.scale(scaleX, scaleY);
-
 
             ColorMaterial colorMaterial = obj.getComponent(ColorMaterial.class);
-            Model model = obj.getComponent(Model.class);
+            List<Model> models = obj.getComponentList(Model.class);
 
-            if(model != null && colorMaterial != null){
-                IModelComponent modelComponent = model.getModelComponent();
+            if(models.size() != 0 && colorMaterial != null){
+                Transform transform = obj.getTransform();
+                int x = (int)transform.getX();
+                int y = (int)transform.getY();
+                float scaleX = transform.getXScale();
+                float scaleY = transform.getYScale();
 
-                if(modelComponent instanceof SwingModelComponent) {
-                    Shape shape = ((SwingModelComponent) modelComponent).getShape();
+                g2d.translate(x, y);
+                g2d.scale(scaleX, scaleY);
+
+
+                Model model = models.get(0);
+                IRenderModel renderModel = model.getRenderModel();
+
+                if(renderModel instanceof SwingModelComponent) {
+                    Shape shape = ((SwingModelComponent) renderModel).getShape();
 
                     Color fillColor = colorMaterial.getFillColor();
 
@@ -63,11 +71,14 @@ class SwingCanvas extends Canvas {
                         g2d.draw(shape);
                     }
                 }
-            }
 
-            g2d.scale(1/scaleX, 1/scaleY);
-            g2d.translate(-x, -y);
+                g2d.scale(1/scaleX, 1/scaleY);
+                g2d.translate(-x, -y);
+            }
         }
+
+
+        g2d.translate(camX, camY);
 
         g.dispose();
         bs.show();

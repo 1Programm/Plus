@@ -3,7 +3,6 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.lifecycle.ILifecycle;
 import com.programm.projects.plus.core.lifecycle.IObservableLifecycle;
-import com.programm.projects.plus.goh.api.ISceneInitializer;
 
 /**
  * An API representation of an Engine
@@ -64,5 +63,5 @@ public interface IEngine extends IObservableLifecycle, IEngineContext {
 
 
     //TEMPORARY
-    void setSceneInitializer(ISceneInitializer sceneInitializer);
+    void setScene(Scene scene);
 }
