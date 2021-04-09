@@ -26,7 +26,14 @@ public class SimpleListGOH implements IGameObjectHandler {
     @Override
     public void update(IGameContext context) {
         for(int i=0;i<objects.size();i++){
-            objects.get(i).update(context);
+            GameObject object = objects.get(i);
+
+            object.update(context);
+            if(object.isDead()){
+                objects.remove(i);
+                batch.remove(object);
+                i--;
+            }
         }
     }
 

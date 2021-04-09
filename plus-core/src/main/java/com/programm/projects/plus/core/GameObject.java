@@ -95,6 +95,8 @@ public class GameObject implements IUpdatable, IInitializable{
     private final Transform transform;
     private final Mover mover;
 
+    private boolean dead;
+
 
     private final Map<Class<? extends IComponent>, IComponent> componentMap;
     private final List<IUpdatableComponent> updatableComponents;
@@ -146,6 +148,14 @@ public class GameObject implements IUpdatable, IInitializable{
         }
 
         return components;
+    }
+
+    public void die(){
+        dead = true;
+    }
+
+    public boolean isDead(){
+        return dead;
     }
 
 }
