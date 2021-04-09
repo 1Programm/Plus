@@ -30,8 +30,10 @@ class SwingCanvas extends Canvas {
 
         Graphics2D g2d = (Graphics2D)g;
 
-        float camX = camera.getX();
-        float camY = camera.getY();
+        float canvasWidth = getWidth();
+        float canvasHeight = getHeight();
+        float camX = camera.getX() - canvasWidth / 2;
+        float camY = camera.getY() - canvasHeight / 2;
         g2d.translate(-camX, -camY);
 
         g2d.setColor(Color.BLACK);
