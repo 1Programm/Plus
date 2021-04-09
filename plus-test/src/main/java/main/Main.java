@@ -1,5 +1,6 @@
 package main;
 
+import com.programm.projects.plus.components.basic.KeyboardController;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.engine.api.IEngine;
@@ -9,14 +10,13 @@ import com.programm.projects.plus.goh.api.IObjectConsumer;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.Model;
 import lombok.extern.slf4j.Slf4j;
-import main.components.KeyboardController;
 
 import java.awt.*;
 
 @Slf4j
 public class Main extends Scene {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         IEngine engine = new SimpleEngine();
         engine.setScene(new Main());
 

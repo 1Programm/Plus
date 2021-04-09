@@ -3,6 +3,7 @@ package com.programm.projects.plus.engine.api;
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.core.IRenderContext;
+import com.programm.projects.plus.core.ISceneContext;
 import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
@@ -159,6 +160,11 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     @Override
     public EngineSettings settings() {
         return settings;
+    }
+
+    @Override
+    public ISceneContext scene() {
+        return scene;
     }
 
     @Override

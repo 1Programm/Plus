@@ -12,6 +12,8 @@ public interface IEngineContext {
 
     EngineSettings settings();
 
+    ISceneContext scene();
+
     IRenderContext rendererContext();
 
 }

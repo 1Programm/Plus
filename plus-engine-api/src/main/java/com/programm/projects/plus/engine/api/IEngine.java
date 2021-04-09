@@ -1,6 +1,7 @@
 package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.ILifecycle;
 import com.programm.projects.plus.core.lifecycle.IObservableLifecycle;
 
@@ -22,7 +23,7 @@ import com.programm.projects.plus.core.lifecycle.IObservableLifecycle;
  * </code>
  *
  */
-public interface IEngine extends IObservableLifecycle, IEngineContext {
+public interface IEngine extends IObservableLifecycle {
 
     /**
      * Method to retrieve the engine phase
@@ -61,6 +62,7 @@ public interface IEngine extends IObservableLifecycle, IEngineContext {
      */
     EnginePhase phase();
 
+    IEventHandler events();
 
     //TEMPORARY
     void setScene(Scene scene);

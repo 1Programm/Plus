@@ -2,6 +2,7 @@ package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.ISceneContext;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.events.RegisterCameraEvent;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
@@ -10,7 +11,7 @@ import com.programm.projects.plus.renderer.api.IRenderer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class Scene {
+public abstract class Scene implements ISceneContext {
 
     private IGameObjectHandler goh;
     private IRenderer renderer;
@@ -34,15 +35,17 @@ public abstract class Scene {
     }
 
     public final void load(){
-        initScene(this::initAddObject);
+        initScene(this::addObject);
 
         if(camera == null){
             log.error("No Camera found in scene!");
         }
     }
 
-    private void initAddObject(GameObject gameObject){
-        goh.add(gameObject);
+
+    @Override
+    public void addObject(GameObject object) {
+        goh.add(object);
     }
 
     protected abstract void initScene(IObjectConsumer objects);
