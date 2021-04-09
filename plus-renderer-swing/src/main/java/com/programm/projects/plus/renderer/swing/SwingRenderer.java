@@ -1,14 +1,14 @@
 package com.programm.projects.plus.renderer.swing;
 
+import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.IGameContext;
 import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.components.IRenderComponent;
-import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
+import com.programm.projects.plus.core.settings.WindowSettings;
 import com.programm.projects.plus.renderer.api.IRenderer;
-import com.programm.projects.plus.renderer.api.WindowInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -24,8 +24,10 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
 
     // LIFECYCLE METHODS
     @Override
-    public void setup(IEventHandler eventHandler, WindowInfo windowInfo) {
-        window = new SwingWindow(windowInfo.getTitle(), windowInfo.getWidth(), windowInfo.getHeight(), eventHandler);
+    public void setup(IEngineContext context) {
+        WindowSettings settings = context.settings().window();
+
+        window = new SwingWindow(settings.getTitle(), settings.getWidth(), settings.getHeight(), context.events());
         addLifecycle(window);
     }
 

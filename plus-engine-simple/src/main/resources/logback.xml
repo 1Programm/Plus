@@ -3,9 +3,6 @@
     <property resource="engine.properties"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-<!--        <encoder>-->
-<!--            <pattern>[%-5level] %-40([%-10thread] %class{0}.%M) > %msg%n</pattern>-->
-<!--        </encoder>-->
         <encoder class="com.programm.projects.plus.engine.simple.logging.MultiLayoutPattern">
             <pattern>${plus.logging.client.pattern}</pattern>
 

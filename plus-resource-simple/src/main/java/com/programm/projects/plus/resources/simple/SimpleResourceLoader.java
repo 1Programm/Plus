@@ -15,12 +15,17 @@ public class SimpleResourceLoader implements IResourceManager {
 
     @Override
     public void loadStaticResources() {
-        Map<String, Resource> defaultEngineProperties = ResourceLoaderUtils.loadPropertiesFile("/engine-default.properties");
-        staticResources.putAll(defaultEngineProperties);
+        loadPropertyFile("/engine-default.properties");
+        loadPropertyFile("/game-default.properties");
 
         //Overriding default values
-        Map<String, Resource> engineProperties = ResourceLoaderUtils.loadPropertiesFile("/engine.properties");
-        staticResources.putAll(engineProperties);
+        loadPropertyFile("/engine.properties");
+        loadPropertyFile("/game.properties");
+    }
+
+    private void loadPropertyFile(String resource){
+        Map<String, Resource> properties = ResourceLoaderUtils.loadPropertiesFile(resource);
+        staticResources.putAll(properties);
     }
 
     @Override

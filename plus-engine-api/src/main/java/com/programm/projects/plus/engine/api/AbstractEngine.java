@@ -7,11 +7,11 @@ import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
 import com.programm.projects.plus.core.resource.IResources;
+import com.programm.projects.plus.core.settings.EngineSettings;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import com.programm.projects.plus.engine.api.events.EventStack;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.renderer.api.IRenderer;
-import com.programm.projects.plus.renderer.api.WindowInfo;
 import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import com.programm.projects.plus.resource.api.IResourceManager;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
     private final GameStackContext gameContext = new GameStackContext();
     private final EventStack eventStack = new EventStack();
+    private final EngineSettings settings = new EngineSettings();
 
     protected IResourceManager resourceManager;
     protected IRunLoop runLoop;
@@ -32,10 +33,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
 
-    //TODO EngineInfo -> WindowInfo with defaults
 
-    //TEMPORARY:
-    private final WindowInfo windowInfo = new WindowInfo("Plus Engine", 600, 500);
 
     protected abstract IResourceManager initResourceManager();
     protected abstract IRunLoop initRunLoop();
@@ -62,6 +60,9 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         //LOAD RESOURCES
         resourceManager.loadStaticResources();
 
+        //INIT SETTINGS
+        initSettings();
+
         //ADD SUBSYSTEMS
         addLifecycle(resourceManager);
         addLifecycle(runLoop);
@@ -71,12 +72,24 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
         //[PREPARE] PHASE
         runLoop.setup(this::update, this);
-        renderer.setup(events(), windowInfo);
+        renderer.setup(this);
         goh.setup(this);
 
         scene.init(goh, renderer, this);
 
         changePhase(EnginePhase.PREPARED);
+    }
+
+    private void initSettings(){
+        //Init Window Settings
+        String title = resources().getResource("game.window.title").asString("ERR");
+        settings().window().setTitle(title);
+
+        int width = resources().getResource("game.window.width").asInt(0);
+        settings.window().setWidth(width);
+
+        int height = resources().getResource("game.window.height").asInt(0);
+        settings.window().setHeight(height);
     }
 
     @Override
@@ -141,6 +154,11 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     @Override
     public IResources resources() {
         return resourceManager;
+    }
+
+    @Override
+    public EngineSettings settings() {
+        return settings;
     }
 
     @Override
