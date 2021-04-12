@@ -12,6 +12,9 @@ class EngineStaticLogger {
 
     public static void logStartup(IResourceManager resourceManager){
         Resource resource = resourceManager.getResource("plus.engine.start-message");
+        Resource disabled = resourceManager.getResource("plus.engine.start-message-disabled");
+
+        if(!disabled.isNull()) return;
 
         if(resource != null){
             String message = resource.asString(DEFAULTS_DEFAULT_START_MESSAGE);
@@ -22,6 +25,9 @@ class EngineStaticLogger {
 
     public static void logShutdown(IResourceManager resourceManager){
         Resource resource = resourceManager.getResource("plus.engine.stop-message");
+        Resource disabled = resourceManager.getResource("plus.engine.stop-message-disabled");
+
+        if(!disabled.isNull()) return;
 
         if(resource != null){
             String message = resource.asString(DEFAULTS_DEFAULT_STOP_MESSAGE);

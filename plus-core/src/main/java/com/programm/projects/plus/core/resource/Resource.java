@@ -9,7 +9,7 @@ public interface Resource {
     Float asFloat();
     Double asDouble();
 
-    default boolean isEmptyResource(){ return false; }
+    default boolean isNull(){ return false; }
 
 
     //DEFAULTS

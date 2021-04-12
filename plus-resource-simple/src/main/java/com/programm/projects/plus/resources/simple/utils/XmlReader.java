@@ -7,9 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class XmlReader {
 
@@ -44,6 +42,35 @@ public class XmlReader {
         @Override
         public String toString() {
             return "" + i;
+        }
+    }
+
+    public static Properties parseNodeToProperties(Node node){
+        Map<String, String> map = new HashMap<>();
+
+        insertFromNode(map, node, null);
+
+        Properties properties = new Properties();
+        properties.putAll(map);
+
+        return properties;
+    }
+
+    private static void insertFromNode(Map<String, String> map, Node node, String curPath){
+        if(node.children == null){
+            map.put(curPath, node.name);
+        }
+        else {
+            if(curPath == null) {
+                curPath = node.name;
+            }
+            else {
+                curPath += "." + node.name;
+            }
+
+            for(Node child : node.children){
+                insertFromNode(map, child, curPath);
+            }
         }
     }
 
@@ -119,6 +146,21 @@ public class XmlReader {
                 throw new XmlParseException("No closing > for node!", start.i);
             }
 
+            //Test for comment
+            if(sb.charAt(start.i) == '!' && sb.charAt(start.i + 1) == '-' && sb.charAt(start.i + 2) == '-'){
+                if(sb.charAt(nextClosing - 1) != '-' || sb.charAt(nextClosing - 2) != '-'){
+                    throw new XmlParseException("Invalid end of comment!", nextClosing);
+                }
+
+                start.i = nextClosing + 1;
+                continue;
+            }
+
+
+            if(sb.charAt(nextClosing - 1) == '/'){
+                nextClosing--;
+            }
+
             String content = sb.substring(start.i, nextClosing);
             int contentNextSpace = content.indexOf(' ');
             if (contentNextSpace == -1) {
@@ -129,12 +171,8 @@ public class XmlReader {
 
             start.i = nextClosing + 1;
 
-            int earlyEndTest = nextClosing - 1;
-            while(sb.charAt(earlyEndTest) == ' '){
-                earlyEndTest--;
-            }
-
-            if(sb.charAt(earlyEndTest) == '/'){
+            if(sb.charAt(nextClosing) == '/'){
+                start.i++;
                 children.add(new Node(name, null));
                 continue;
             }

@@ -1,6 +1,76 @@
 <configuration>
-    <property resource="engine-default.properties"/>
-    <property resource="engine.properties"/>
+
+    <!-- ############## -->
+    <!-- GET FILE PATHS -->
+    <!-- ############## -->
+
+    <!-- ENGINE FILES -->
+    <define name="engine-default-props" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>engine-default</name>
+        <type>properties</type>
+    </define>
+
+    <define name="engine-props" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>engine</name>
+        <type>properties</type>
+    </define>
+
+    <define name="engine-default-xml" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>engine-default</name>
+        <type>xml</type>
+    </define>
+
+    <define name="engine-xml" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>engine</name>
+        <type>xml</type>
+    </define>
+
+    <!-- GAME FILES -->
+    <define name="game-default-props" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>game-default</name>
+        <type>properties</type>
+    </define>
+
+    <define name="game-props" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>game</name>
+        <type>properties</type>
+    </define>
+
+    <define name="game-default-xml" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>game-default</name>
+        <type>xml</type>
+    </define>
+
+    <define name="game-xml" class="com.programm.projects.plus.engine.simple.logging.LogbackExternalVariables">
+        <name>game</name>
+        <type>xml</type>
+    </define>
+
+
+
+    <!-- ################# -->
+    <!-- INSERT PROPERTIES -->
+    <!-- ################# -->
+
+    <!-- DEFAULTS -->
+    <property resource="${engine-default-props}"/>
+    <property resource="${game-default-props}"/>
+    <property resource="${engine-default-xml}"/>
+    <property resource="${game-default-xml}"/>
+
+    <!-- BY CLIENT -->
+    <property resource="${engine-props}"/>
+    <property resource="${game-props}"/>
+    <property resource="${engine-xml}"/>
+    <property resource="${game-xml}"/>
+
+
+
+
+
+    <!-- ######## -->
+    <!-- APPENDER -->
+    <!-- ######## -->
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="com.programm.projects.plus.engine.simple.logging.MultiLayoutPattern">
@@ -17,10 +87,18 @@
         </encoder>
     </appender>
 
+
+    <!-- ############## -->
+    <!-- LOGGING LEVELS -->
+    <!-- ############## -->
+
+    <!-- Level for Engine -->
     <logger name="com.programm.projects.plus" level="${plus.logging.engine.level}" />
 
-    <logger name="com.programm.projects.plus.engine.api.EngineStaticLogger" level="INFO" />
+    <!-- Level for static Logger -->
+    <logger name="com.programm.projects.plus.engine.api.EngineStaticLogger" level="TRACE" />
 
+    <!-- Level for all other -->
     <root level="${plus.logging.client.level}">
         <appender-ref ref="STDOUT" />
     </root>

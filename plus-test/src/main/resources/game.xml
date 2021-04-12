@@ -1,0 +1,24 @@
+<plus>
+    <logging>
+        <engine>
+            <level>INFO</level>
+        </engine>
+        <client>
+            <level>TRACE</level>
+        </client>
+    </logging>
+
+    <engine>
+        <run-loop>
+            <fps>60</fps>
+        </run-loop>
+    </engine>
+
+    <game>
+        <window>
+            <title>Plus Test Game</title>
+            <width>600</width>
+            <height>500</height>
+        </window>
+    </game>
+</plus>

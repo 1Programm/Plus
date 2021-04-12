@@ -1,6 +1,6 @@
 package com.programm.projects.plus.resources.simple;
 
-import com.programm.projects.plus.resource.api.EmptyResource;
+import com.programm.projects.plus.resource.api.NullResource;
 import com.programm.projects.plus.resource.api.IResourceManager;
 import com.programm.projects.plus.core.resource.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -15,22 +15,51 @@ public class SimpleResourceLoader implements IResourceManager {
 
     @Override
     public void loadStaticResources() {
-        loadFile("/engine-default.properties");
-        loadFile("/game-default.properties");
+        log.debug("Loading static resources...");
 
-        //Overriding default values
-        loadFile("/engine.properties");
-        loadFile("/game.properties");
+        Map<String, Resource> engineDefProps = ResourceLoaderUtils.loadFile("/engine-default.properties");
+        if(engineDefProps != null){
+            log.debug("Found engine-default.properties - loading default engine properties.");
+            insertStaticResource(engineDefProps);
+        }
+
+        Map<String, Resource> gameDefProps = ResourceLoaderUtils.loadFile("/game-default.properties");
+        if(gameDefProps != null){
+            log.debug("Found game-default.properties - loading default game properties.");
+            insertStaticResource(gameDefProps);
+        }
+
+        //Overriding default engine values
+        Map<String, Resource> engineXml = ResourceLoaderUtils.loadFile("/engine.xml");
+        Map<String, Resource> engineProps = ResourceLoaderUtils.loadFile("/engine.properties");
+
+        if(engineXml != null){
+            log.debug("Found engine.xml - loading engine properties.");
+            insertStaticResource(engineXml);
+        }
+
+        if(engineProps != null){
+            log.debug("Found engine.properties - loading engine properties.");
+            insertStaticResource(engineProps);
+        }
+
+        //Overriding default engine values
+        Map<String, Resource> gameXml = ResourceLoaderUtils.loadFile("/game.xml");
+        Map<String, Resource> gameProps = ResourceLoaderUtils.loadFile("/game.properties");
+
+        if(gameXml != null){
+            log.debug("Found game.xml - loading game properties.");
+            insertStaticResource(gameXml);
+        }
+
+        if(gameProps != null){
+            log.debug("Found game.properties - loading engine properties.");
+            insertStaticResource(gameProps);
+        }
     }
 
-    private void loadFile(String path){
-        Map<String, Resource> resourceMap = ResourceLoaderUtils.loadFile(path);
-        staticResources.putAll(resourceMap);
-    }
-
-    private void loadPropertyFile(String path){
-        Map<String, Resource> properties = ResourceLoaderUtils.loadPropertiesFile(path);
-        staticResources.putAll(properties);
+    private void insertStaticResource(Map<String, Resource> resourceMap){
+        ResourceLoaderUtils.insertResource(staticResources, resourceMap);
     }
 
     @Override
@@ -53,17 +82,22 @@ public class SimpleResourceLoader implements IResourceManager {
             return staticRes;
         }
 
+        Resource resource = null;
+
         int lastDot = name.lastIndexOf('.');
         if(lastDot != -1){
             String parentPath = name.substring(0, lastDot);
             String valueName = name.substring(lastDot + 1);
 
             Resource parentResource = getResource(parentPath);
-            return parentResource.get(valueName);
+            resource = parentResource.get(valueName);
         }
 
+        if(resource != null){
+            return resource;
+        }
 
         //return empty resource so no null pointer is thrown
-        return new EmptyResource();
+        return new NullResource();
     }
 }

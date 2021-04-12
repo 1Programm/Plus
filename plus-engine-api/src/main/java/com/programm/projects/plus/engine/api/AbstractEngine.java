@@ -79,13 +79,13 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
     private void initSettings(){
         //Init Window Settings
-        String title = resources().getResource("game.window.title").asString("ERR");
+        String title = resources().getResource("plus.game.window.title").asString("ERR");
         settings().window().setTitle(title);
 
-        int width = resources().getResource("game.window.width").asInt(0);
+        int width = resources().getResource("plus.game.window.width").asInt(0);
         settings.window().setWidth(width);
 
-        int height = resources().getResource("game.window.height").asInt(0);
+        int height = resources().getResource("plus.game.window.height").asInt(0);
         settings.window().setHeight(height);
 
         //Init Run loop

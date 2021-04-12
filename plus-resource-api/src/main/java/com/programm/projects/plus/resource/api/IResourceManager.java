@@ -12,7 +12,7 @@ public interface IResourceManager extends ILifecycle, IResources {
      * Method to get a specific resource.
      * A resource can range from a simple value to a scene resource or sound file, mesh file, usw...
      * @param name The name of the resource
-     * @return A resource if the <code>name</code> matches. Or {@link EmptyResource} if no resource was found.
+     * @return A resource if the <code>name</code> matches. Or {@link NullResource} if no resource was found.
      */
     @Override
     Resource getResource(String name);

@@ -9,20 +9,35 @@ import com.programm.projects.plus.resources.simple.utils.XmlReader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 class ResourceLoaderUtils {
+
+    public static void insertResource(Map<String, Resource> map, Map<String, Resource> nMap){
+        for(String key : nMap.keySet()){
+            Resource resource = map.get(key);
+
+            if(!(resource instanceof MapResource mapResource)){
+                map.put(key, nMap.get(key));
+            }
+            else {
+                Resource nMapRes = nMap.get(key);
+                if(!(nMapRes instanceof MapResource mapResource2)){
+                    throw new IllegalStateException("INVALID STATE"); // IDK
+                }
+                else {
+                    insertResource(mapResource.getResourceMap(), mapResource2.getResourceMap());
+                }
+            }
+        }
+    }
 
     public static Map<String, Resource> loadFile(String path){
         if(path.endsWith(".properties")){
             return loadPropertiesFile(path);
         }
         else if(path.endsWith(".xml")){
-            NamedResource resource = loadXmlFile(path);
-            return Collections.singletonMap(resource.getName(), resource.getResource());
+            return loadXmlFile(path);
         }
 
         int lastDot = Math.max(0, path.lastIndexOf('.'));
@@ -35,6 +50,8 @@ class ResourceLoaderUtils {
     }
 
     public static Map<String, Resource> loadPropertiesFile(InputStream inputStream){
+        if(inputStream == null) return null;
+
         Properties properties = new Properties();
 
         try {
@@ -46,16 +63,41 @@ class ResourceLoaderUtils {
 
         Map<String, Resource> map = new HashMap<>();
 
-        properties.forEach((key, val) -> {
-            map.put((String)key, ValueResource.OfUndefined(val));
-        });
+        for(String key : properties.stringPropertyNames()){
+            insertResource(map, key, properties.getProperty(key));
+        }
 
         return map;
     }
 
-    public static NamedResource loadXmlFile(String path){
+    private static void insertResource(Map<String, Resource> map, String key, String resource){
+        String[] split = key.split("\\.", 2);
+
+        if(split.length == 1){
+            map.put(split[0], ValueResource.OfUndefined(resource));
+        }
+        else {
+            Resource res = map.get(split[0]);
+
+            if(!(res instanceof MapResource mRes)){
+                Map<String, Resource> nMap = new HashMap<>();
+                insertResource(nMap, split[1], resource);
+                res = new MapResource(nMap);
+                map.put(split[0], res);
+            }
+            else {
+                insertResource(mRes.getResourceMap(), split[1], resource);
+            }
+        }
+    }
+
+    public static Map<String, Resource> loadXmlFile(String path){
         InputStream inputStream = ResourceLoaderUtils.class.getResourceAsStream(path);
-        return loadXmlFile(inputStream);
+
+        if(inputStream == null) return null;
+
+        NamedResource res = loadXmlFile(inputStream);
+        return Collections.singletonMap(res.getName(), res.getResource());
     }
 
     public static NamedResource loadXmlFile(InputStream inputStream){
@@ -80,8 +122,14 @@ class ResourceLoaderUtils {
         Map<String, Resource> resMap = new HashMap<>();
 
         for(XmlReader.Node child : node.children){
-            Resource childResource = loadResourceFromXmlNode(child);
-            resMap.put(child.name, childResource);
+            if(child.children != null && child.children.size() == 1 && child.children.get(0).children == null){
+                ValueResource vRes = ValueResource.OfUndefined(child.children.get(0).name);
+                resMap.put(child.name, vRes);
+            }
+            else {
+                Resource childResource = loadResourceFromXmlNode(child);
+                resMap.put(child.name, childResource);
+            }
         }
 
         return new MapResource(resMap);

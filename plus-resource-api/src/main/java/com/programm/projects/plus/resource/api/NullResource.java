@@ -6,7 +6,7 @@ import com.programm.projects.plus.core.resource.Resource;
  * Representing an empty resource which is returned when no resource was found.
  * All methods should throw a {@link NullPointerException} except for the methods with a default value specified!
  */
-public final class EmptyResource implements Resource{
+public final class NullResource implements Resource{
 
     private static NullPointerException throwException() {
         return new NullPointerException("This resource is an EmptyResource and should only be used with defaults. A resource can be checked if it represents an empty resource by the isEmptyResource() method.");
@@ -43,7 +43,7 @@ public final class EmptyResource implements Resource{
     }
 
     @Override
-    public boolean isEmptyResource() {
+    public boolean isNull() {
         return true;
     }
 
