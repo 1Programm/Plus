@@ -8,8 +8,10 @@ import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.engine.api.Scene;
 import com.programm.projects.plus.engine.simple.SimpleEngine;
 import com.programm.projects.plus.goh.api.IObjectConsumer;
+import com.programm.projects.plus.renderer.api.IKeyboard;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.Model;
+import com.programm.projects.plus.renderer.api.events.KeyReleasedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -20,6 +22,12 @@ public class Main extends Scene {
     public static void main(String[] args) {
         IEngine engine = new SimpleEngine();
         engine.setScene(new Main());
+
+        engine.events().listenFor(KeyReleasedEvent.class, e -> {
+            if(e.getKeyCode() == IKeyboard.KEY_ESCAPE){
+                engine.shutdown();
+            }
+        });
 
         engine.startup();
     }

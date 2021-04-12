@@ -94,6 +94,18 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     @Override
+    public void shutdown() {
+        if(stopRequest) {
+            super.shutdown();
+        }
+        else {
+            //Resolves invalid renderer state !!!
+            //Renderer thread must not call the super.shutdown() as it could enter invalid peer state
+            stopRequest = true;
+        }
+    }
+
+    @Override
     protected void onAfterStartup() {
         scene.load();
 
