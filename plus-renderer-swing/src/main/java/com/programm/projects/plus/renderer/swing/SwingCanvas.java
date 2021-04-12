@@ -48,9 +48,11 @@ class SwingCanvas extends Canvas {
                 int y = (int)transform.getY();
                 float scaleX = transform.getXScale();
                 float scaleY = transform.getYScale();
+                float rotation = transform.getRotation();
 
                 g2d.translate(x, y);
                 g2d.scale(scaleX, scaleY);
+                g2d.rotate(rotation);
 
 
                 Model model = models.get(0);
@@ -72,6 +74,7 @@ class SwingCanvas extends Canvas {
                     }
                 }
 
+                g2d.rotate(-rotation);
                 g2d.scale(1/scaleX, 1/scaleY);
                 g2d.translate(-x, -y);
             }

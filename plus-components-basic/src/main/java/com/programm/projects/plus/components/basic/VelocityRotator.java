@@ -4,14 +4,13 @@ import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IGameContext;
 import com.programm.projects.plus.core.IUpdatableComponent;
 import com.programm.projects.plus.core.components.Mover;
-import com.programm.projects.plus.maths.Vector2f;
 
-public class VelocityMover implements IUpdatableComponent {
+public class VelocityRotator implements IUpdatableComponent {
 
-    private final Vector2f velocity;
+    private final float rotVelocity;
 
-    public VelocityMover(Vector2f velocity) {
-        this.velocity = velocity;
+    public VelocityRotator(float rotVelocity) {
+        this.rotVelocity = rotVelocity;
     }
 
     @Override
@@ -19,10 +18,6 @@ public class VelocityMover implements IUpdatableComponent {
         GameObject object = context.getObject();
 
         Mover mover = object.getComponent(Mover.class);
-
-        float vx = (float) (velocity.getX() * context.getDelta());
-        float vy = (float) (velocity.getY() * context.getDelta());
-
-        mover.move(vx, vy);
+        mover.rotate((float) (rotVelocity * context.getDelta()));
     }
 }

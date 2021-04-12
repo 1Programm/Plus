@@ -1,6 +1,7 @@
 package main;
 
 import com.programm.projects.plus.components.basic.KeyboardController;
+import com.programm.projects.plus.components.basic.VelocityRotator;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.engine.api.IEngine;
@@ -29,6 +30,9 @@ public class Main extends Scene {
                 .setPosition(0, 0)
                 .add(new KeyboardController(100))
                 .add(new Camera())
+                .add(new ColorMaterial(Color.BLUE))
+                .add(Model.Rectangle(32, 32))
+                .add(new VelocityRotator(1))
                 .build());
 
         objects.add(GameObject.create()
