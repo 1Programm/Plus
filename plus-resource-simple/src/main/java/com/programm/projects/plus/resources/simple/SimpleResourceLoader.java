@@ -1,5 +1,6 @@
 package com.programm.projects.plus.resources.simple;
 
+import com.programm.projects.plus.resource.api.MapResource;
 import com.programm.projects.plus.resource.api.NullResource;
 import com.programm.projects.plus.resource.api.IResourceManager;
 import com.programm.projects.plus.core.resource.Resource;
@@ -59,7 +60,30 @@ public class SimpleResourceLoader implements IResourceManager {
     }
 
     private void insertStaticResource(Map<String, Resource> resourceMap){
+        log.trace("Properties:");
+        printResource(resourceMap, null);
+
         ResourceLoaderUtils.insertResource(staticResources, resourceMap);
+    }
+
+    private void printResource(Map<String, Resource> map, String path){
+        for(String key : map.keySet()){
+            if(path == null){
+                path = key;
+            }
+            else {
+                path += "." + key;
+            }
+
+            Resource resource = map.get(key);
+            if(!(resource instanceof MapResource mapResource)){
+                String val = resource.asString("undefined");
+                log.trace(" | {} = {}", path, val);
+            }
+            else {
+                printResource(mapResource.getResourceMap(), path);
+            }
+        }
     }
 
     @Override

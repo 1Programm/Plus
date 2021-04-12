@@ -6,6 +6,7 @@ import com.programm.projects.plus.resource.api.NamedResource;
 import com.programm.projects.plus.resource.api.ValueResource;
 import com.programm.projects.plus.resources.simple.utils.XmlReadException;
 import com.programm.projects.plus.resources.simple.utils.XmlReader;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
