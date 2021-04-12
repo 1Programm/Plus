@@ -3,6 +3,7 @@ package com.programm.projects.plus.renderer.swing;
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.IGameContext;
 import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.IRunLoopInfo;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.components.IRenderComponent;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
@@ -58,7 +59,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     //OTHER METHODS
 
     @Override
-    public void update(IGameContext context) {
+    public void update() {
         if(window == null) return;
         window.canvas.render(renderableBatch, Color.WHITE, camera);
     }

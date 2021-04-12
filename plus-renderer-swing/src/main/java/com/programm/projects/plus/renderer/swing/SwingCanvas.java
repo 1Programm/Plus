@@ -3,11 +3,11 @@ package com.programm.projects.plus.renderer.swing;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.core.components.Camera;
-import com.programm.projects.plus.renderer.api.components.ColorMaterial;
-import com.programm.projects.plus.renderer.api.components.Model;
-import com.programm.projects.plus.renderer.api.components.IRenderModel;
 import com.programm.projects.plus.core.components.Transform;
-import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
+import com.programm.projects.plus.renderer.api.components.ColorMaterial;
+import com.programm.projects.plus.renderer.api.components.IRenderModel;
+import com.programm.projects.plus.renderer.api.components.Model;
+import com.programm.projects.plus.renderer.swing.components.ISwingRenderModel;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -56,21 +56,19 @@ class SwingCanvas extends Canvas {
                 Model model = models.get(0);
                 IRenderModel renderModel = model.getRenderModel();
 
-                if(renderModel instanceof SwingModelComponent) {
-                    Shape shape = ((SwingModelComponent) renderModel).getShape();
-
+                if(renderModel instanceof ISwingRenderModel swingModel) {
                     Color fillColor = colorMaterial.getFillColor();
 
                     if(fillColor != null){
                         g2d.setColor(fillColor);
-                        g2d.fill(shape);
+                        swingModel.renderFill(g2d);
                     }
 
                     Color borderColor = colorMaterial.getBorderColor();
 
                     if(borderColor != null){
                         g2d.setColor(borderColor);
-                        g2d.draw(shape);
+                        swingModel.renderBounds(g2d);
                     }
                 }
 

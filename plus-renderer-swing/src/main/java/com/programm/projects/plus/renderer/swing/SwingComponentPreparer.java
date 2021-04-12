@@ -6,10 +6,7 @@ import com.programm.projects.plus.renderer.api.components.Model;
 import com.programm.projects.plus.renderer.api.components.IRenderModel;
 import com.programm.projects.plus.renderer.api.components.MeshModel;
 import com.programm.projects.plus.renderer.api.components.ShapeModel;
-import com.programm.projects.plus.renderer.swing.components.SwingModelComponent;
-
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
+import com.programm.projects.plus.renderer.swing.components.*;
 
 public class SwingComponentPreparer implements IRenderContext {
 
@@ -23,9 +20,7 @@ public class SwingComponentPreparer implements IRenderContext {
     private void prepareModel(Model model){
         IRenderModel renderModel = model.getRenderModel();
 
-        if(!(renderModel instanceof SwingModelComponent)) {
-            Shape shape;
-
+        if(!(renderModel instanceof ISwingRenderModel)) {
             if(model.getType() == Model.Type.Mesh) {
                 MeshModel mModel = (MeshModel) model;
 
@@ -47,38 +42,23 @@ public class SwingComponentPreparer implements IRenderContext {
                     yPoints[i] = (int) vertices[i * 2 + 1];
                 }
 
-                shape = new Polygon(xPoints, yPoints, length);
+                renderModel = new SwingPolygonModel(xPoints, yPoints, length);
             }
             else {
                 ShapeModel sModel = (ShapeModel) model;
                 ShapeModel.ShapeType type = sModel.getShapeType();
 
                 if(type == ShapeModel.ShapeType.Rectangle){
-                    float width = sModel.getWidth();
-                    float height = sModel.getHeight();
-                    int x = (int)(width / 2);
-                    int y = (int)(height / 2);
-
-                    shape = new Rectangle(-x, -y, (int)width, (int)height);
+                    renderModel = new SwingRectangleModel(sModel);
                 }
                 else if(type == ShapeModel.ShapeType.Circle){
-                    float radius = sModel.getRadius();
-
-                    shape = new Ellipse2D.Float(-radius, -radius, radius * 2, radius * 2);
+                    renderModel = new SwingCircleModel(sModel);
                 }
-                else { // if(type == ShapeModel.ShapeType.Triangle)
-                    int t1x = (int)sModel.getT1x();
-                    int t1y = (int)sModel.getT1y();
-                    int t2x = (int)sModel.getT2x();
-                    int t2y = (int)sModel.getT2y();
-                    int t3x = (int)sModel.getT3x();
-                    int t3y = (int)sModel.getT3y();
-
-                    shape = new Polygon(new int[]{t1x, t2x, t3x}, new int[]{t1y, t2y, t3y}, 3);
+                else { //if(type == ShapeModel.ShapeType.Line)
+                    renderModel = new SwingLineModel(sModel);
                 }
             }
 
-            renderModel = new SwingModelComponent(shape);
             model.setRenderModel(renderModel);
         }
     }

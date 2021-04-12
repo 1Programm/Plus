@@ -3,31 +3,38 @@ package com.programm.projects.plus.engine.simple;
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.engine.api.EnginePhase;
 import com.programm.projects.plus.engine.api.IRunLoop;
-import com.programm.projects.plus.engine.api.IRunLoopInfo;
+import com.programm.projects.plus.core.IRunLoopInfo;
 import com.programm.projects.plus.engine.api.events.EnginePhaseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
 
-    private final int fps;
+    private int fps;
     private Runnable updateCallback;
     private boolean running;
     private final Thread thread = new Thread(this::run, "Simple Loop");
 
+    //Saved deltas
+    private double testd;
+    private int testi;
+
+
     //current info
     private int frames;
     private int updates;
-
-    public SimpleRunLoop(int fps) {
-        this.fps = fps;
-    }
+    private double delta;
 
     @Override
     public void setup(Runnable updateCallback, IEngineContext context) {
         this.updateCallback = updateCallback;
 
         context.events().listenFor(EnginePhaseEvent.class, this::onEnginePhaseChanged);
+    }
+
+    @Override
+    public void setSync(int fps) {
+        this.fps = fps;
     }
 
     private void onEnginePhaseChanged(EnginePhaseEvent event){
@@ -57,29 +64,50 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
 
     private void run() {
         long lastTime = System.nanoTime();
-        double ns = 1000000000.0 / fps;
-        double delta = 0;
+        double ns = 1000000000.0;
+        double ms = 1.0 / ns;
+        double fpsNs = ns / fps;
         long timer = System.currentTimeMillis();
+        float delta = 0;
 
         while(running){
             long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
+            long diff = (now - lastTime);
+
+            delta += diff;
+            calcDelta(delta * ms);
             lastTime = now;
 
-            while(delta >= 1){
+            while(delta >= fpsNs){
                 updateCallback.run();
-                this.updates++;
-                delta--;
+                updates++;
+                delta -= fpsNs;
             }
 
-            this.frames++;
+            frames++;
 
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
-                this.frames = 0;
-                this.updates = 0;
+                frames = 0;
+                updates = 0;
             }
         }
+    }
+
+    private void calcDelta(double curDelta){
+        testd += curDelta;
+        testi ++;
+
+        if(testi >= 1000){
+            testd /= 10;
+            testi /= 10;
+        }
+
+        this.delta = testd / testi;
+
+//        if(this.delta > 10){
+//            System.err.println("Delta: " + delta + ", d: " + testd + ", testi: " + testi + ", curDelta: " + curDelta);
+//        }
     }
 
     @Override
@@ -100,5 +128,10 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
     @Override
     public int getTicks() {
         return updates;
+    }
+
+    @Override
+    public double getDelta() {
+        return delta;
     }
 }

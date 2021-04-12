@@ -21,7 +21,7 @@ public class SimpleEngine extends AbstractEngine {
 
     public SimpleEngine() {
         this.resourceLoader = new SimpleResourceLoader();
-        this.tmpRunLoop = new SimpleRunLoop(60);
+        this.tmpRunLoop = new SimpleRunLoop();
         this.tmpRenderer = new SwingRenderer();
         this.tmpGOH = new SimpleListGOH();
     }
@@ -67,16 +67,16 @@ public class SimpleEngine extends AbstractEngine {
 
     public void setRunLoop(IRunLoop runLoop) {
         if(testPhase()) return;
-        this.runLoop = runLoop;
+        this.tmpRunLoop = runLoop;
     }
 
     public void setGOH(IGameObjectHandler goh) {
         if(testPhase()) return;
-        this.goh = goh;
+        this.tmpGOH = goh;
     }
 
     public void setRenderer(IRenderer renderer) {
         if(testPhase()) return;
-        this.renderer = renderer;
+        this.tmpRenderer = renderer;
     }
 }

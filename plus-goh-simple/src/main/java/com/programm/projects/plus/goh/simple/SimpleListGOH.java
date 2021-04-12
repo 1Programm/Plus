@@ -1,9 +1,6 @@
 package com.programm.projects.plus.goh.simple;
 
-import com.programm.projects.plus.core.GameObject;
-import com.programm.projects.plus.core.IEngineContext;
-import com.programm.projects.plus.core.IGameContext;
-import com.programm.projects.plus.core.IObjectBatch;
+import com.programm.projects.plus.core.*;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,27 +8,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class SimpleListGOH implements IGameObjectHandler {
+public class SimpleListGOH implements IGameObjectHandler, IGameContext {
 
     private IEngineContext engineContext;
+    private IRunLoopInfo runLoopInfo;
     private boolean initialized;
     private final List<GameObject> objects = new ArrayList<>();
     private final SimpleListBatch batch = new SimpleListBatch();
 
+    // Game Context
+    private GameObject currentObject;
+
     @Override
-    public void setup(IEngineContext engineContext) {
+    public void setup(IEngineContext engineContext, IRunLoopInfo runLoopInfo) {
         this.engineContext = engineContext;
+        this.runLoopInfo = runLoopInfo;
     }
 
     @Override
-    public void update(IGameContext context) {
+    public void update() {
         for(int i=0;i<objects.size();i++){
-            GameObject object = objects.get(i);
+            currentObject = objects.get(i);
 
-            object.update(context);
-            if(object.isDead()){
+            currentObject.update(this);
+            if(currentObject.isDead()){
                 objects.remove(i);
-                batch.remove(object);
+                batch.remove(currentObject);
                 i--;
             }
         }
@@ -67,4 +69,13 @@ public class SimpleListGOH implements IGameObjectHandler {
         return batch;
     }
 
+    @Override
+    public GameObject getObject() {
+        return currentObject;
+    }
+
+    @Override
+    public double getDelta() {
+        return runLoopInfo.getDelta();
+    }
 }

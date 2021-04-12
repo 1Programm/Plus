@@ -27,8 +27,13 @@ public class Main extends Scene {
     protected void initScene(IObjectConsumer objects) {
         objects.add(GameObject.create()
                 .setPosition(0, 0)
-                .add(new KeyboardController(3))
+                .add(new KeyboardController(100))
                 .add(new Camera())
+                .build());
+
+        objects.add(GameObject.create()
+                .add(new ColorMaterial(Color.BLACK))
+                .add(Model.Line(0, 0, 100, 10))
                 .build());
 
         objects.add(GameObject.create()

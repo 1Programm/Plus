@@ -1,39 +1,39 @@
 package com.programm.projects.plus.renderer.api.components;
 
+import com.programm.projects.plus.maths.Vector1f;
+import com.programm.projects.plus.maths.Vector2f;
+import com.programm.projects.plus.maths.Vectorf;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter(AccessLevel.PACKAGE)
 public class ShapeModel extends Model {
 
     public enum ShapeType{
         Rectangle,
         Circle,
-        Triangle,
+        Line
     }
 
     private final ShapeType shapeType;
 
     //Rectangle
-    private final float width, height;
+    private Vector2f size;
 
     //Circle
-    private final float radius;
+    private Vector1f radius;
 
     //Triangle
-    private final float t1x, t2x, t3x;
-    private final float t1y, t2y, t3y;
+    private Vector2f t1, t2, t3;
 
-    public ShapeModel(ShapeType shapeType, float width, float height, float radius, float t1x, float t2x, float t3x, float t1y, float t2y, float t3y) {
+    //Line
+    private Vector2f l1, l2;
+
+    public ShapeModel(ShapeType shapeType) {
         super(Type.Shape);
         this.shapeType = shapeType;
-        this.width = width;
-        this.height = height;
-        this.radius = radius;
-        this.t1x = t1x;
-        this.t2x = t2x;
-        this.t3x = t3x;
-        this.t1y = t1y;
-        this.t2y = t2y;
-        this.t3y = t3y;
     }
+
 }

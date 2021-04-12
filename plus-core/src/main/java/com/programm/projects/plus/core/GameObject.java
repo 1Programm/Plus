@@ -117,13 +117,9 @@ public class GameObject implements IUpdatable, IInitializable{
 
     @Override
     public void update(IGameContext context) {
-        IGameContext newContext = context.createFromNewParent(this);
-
         for(IUpdatableComponent component : updatableComponents) {
-            component.update(newContext);
+            component.update(context);
         }
-
-        newContext.revert();
 
         mover.update(this);
     }

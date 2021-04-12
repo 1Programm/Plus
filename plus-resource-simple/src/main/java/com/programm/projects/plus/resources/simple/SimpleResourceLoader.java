@@ -15,16 +15,21 @@ public class SimpleResourceLoader implements IResourceManager {
 
     @Override
     public void loadStaticResources() {
-        loadPropertyFile("/engine-default.properties");
-        loadPropertyFile("/game-default.properties");
+        loadFile("/engine-default.properties");
+        loadFile("/game-default.properties");
 
         //Overriding default values
-        loadPropertyFile("/engine.properties");
-        loadPropertyFile("/game.properties");
+        loadFile("/engine.properties");
+        loadFile("/game.properties");
     }
 
-    private void loadPropertyFile(String resource){
-        Map<String, Resource> properties = ResourceLoaderUtils.loadPropertiesFile(resource);
+    private void loadFile(String path){
+        Map<String, Resource> resourceMap = ResourceLoaderUtils.loadFile(path);
+        staticResources.putAll(resourceMap);
+    }
+
+    private void loadPropertyFile(String path){
+        Map<String, Resource> properties = ResourceLoaderUtils.loadPropertiesFile(path);
         staticResources.putAll(properties);
     }
 
@@ -46,6 +51,15 @@ public class SimpleResourceLoader implements IResourceManager {
 
         if(staticRes != null){
             return staticRes;
+        }
+
+        int lastDot = name.lastIndexOf('.');
+        if(lastDot != -1){
+            String parentPath = name.substring(0, lastDot);
+            String valueName = name.substring(lastDot + 1);
+
+            Resource parentResource = getResource(parentPath);
+            return parentResource.get(valueName);
         }
 
 

@@ -1,9 +1,6 @@
 package com.programm.projects.plus.engine.api;
 
-import com.programm.projects.plus.core.IEngineContext;
-import com.programm.projects.plus.core.IObjectBatch;
-import com.programm.projects.plus.core.IRenderContext;
-import com.programm.projects.plus.core.ISceneContext;
+import com.programm.projects.plus.core.*;
 import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.lifecycle.AbstractObservableLifecycle;
 import com.programm.projects.plus.core.lifecycle.IChainableLifecycle;
@@ -20,14 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle, IEngineContext {
 
-    private final GameStackContext gameContext = new GameStackContext();
     private final EventStack eventStack = new EventStack();
     private final EngineSettings settings = new EngineSettings();
 
-    protected IResourceManager resourceManager;
-    protected IRunLoop runLoop;
-    protected IRenderer renderer;
-    protected IGameObjectHandler goh;
+    private IResourceManager resourceManager;
+    private IRunLoop runLoop;
+    private IRenderer renderer;
+    private IGameObjectHandler goh;
 
     private Scene scene;
 
@@ -74,7 +70,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         //[PREPARE] PHASE
         runLoop.setup(this::update, this);
         renderer.setup(this);
-        goh.setup(this);
+        goh.setup(this, runLoop.info());
 
         scene.init(goh, renderer, this);
 
@@ -91,6 +87,10 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
         int height = resources().getResource("game.window.height").asInt(0);
         settings.window().setHeight(height);
+
+        //Init Run loop
+        int runLoopSyncFps = resources().getResource("plus.engine.run-loop.fps").asInt(30);
+        runLoop.setSync(runLoopSyncFps);
     }
 
     @Override
@@ -126,22 +126,23 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     protected void update(){
-        if(stopRequest){
+        if(stopRequest){ //Stop on request and init shutdown phase
             shutdown();
             return;
         }
 
+        //Handle events
         eventStack.pollEvents();
 
         //Update all objects
-        goh.update(gameContext);
+        goh.update();
 
         //Get batch of objects which will be rendered
         IObjectBatch objectBatch = goh.getObjectBatch();
 
         //Render scene
         renderer.setRenderableBatch(objectBatch);
-        renderer.update(gameContext);
+        renderer.update();
     }
 
 

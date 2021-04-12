@@ -1,6 +1,7 @@
 package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IRunLoopInfo;
 import com.programm.projects.plus.core.lifecycle.ILifecycle;
 
 /**
@@ -10,6 +11,8 @@ import com.programm.projects.plus.core.lifecycle.ILifecycle;
 public interface IRunLoop extends ILifecycle {
 
     void setup(Runnable updateCallback, IEngineContext context);
+
+    void setSync(int fps);
 
     IRunLoopInfo info();
 

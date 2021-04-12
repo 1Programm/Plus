@@ -2,6 +2,8 @@ package com.programm.projects.plus.renderer.api.components;
 
 import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.components.IRenderComponent;
+import com.programm.projects.plus.maths.Vector1f;
+import com.programm.projects.plus.maths.Vector2f;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +14,38 @@ import lombok.Setter;
 @Setter
 public class Model implements IRenderComponent {
 
+    public static Model Rectangle(Vector2f size){
+        ShapeModel model = new ShapeModel(ShapeModel.ShapeType.Rectangle);
+        model.setSize(size);
+
+        return model;
+    }
+
     public static Model Rectangle(float width, float height){
-        return new ShapeModel(ShapeModel.ShapeType.Rectangle, width, height, 0, 0, 0, 0, 0, 0, 0);
+        return Rectangle(new Vector2f(width, height));
+    }
+
+    public static Model Circle(Vector1f radius){
+        ShapeModel model = new ShapeModel(ShapeModel.ShapeType.Circle);
+        model.setRadius(radius);
+
+        return model;
     }
 
     public static Model Circle(float radius){
-        return new ShapeModel(ShapeModel.ShapeType.Circle, 0, 0, radius, 0, 0, 0, 0, 0, 0);
+        return Circle(new Vector1f(radius));
     }
 
-    public static Model Triangle(float t1x, float t1y, float t2x, float t2y, float t3x, float t3y){
-        return new ShapeModel(ShapeModel.ShapeType.Triangle, 0, 0, 0, t1x, t2x, t3x, t1y, t2y, t3y);
+    public static Model Line(Vector2f l1, Vector2f l2){
+        ShapeModel model = new ShapeModel(ShapeModel.ShapeType.Line);
+        model.setL1(l1);
+        model.setL2(l2);
+
+        return model;
+    }
+
+    public static Model Line(float l1x, float l1y, float l2x, float l2y){
+        return Line(new Vector2f(l1x, l1y), new Vector2f(l2x, l2y));
     }
 
     public static Model Mesh(int dimensions, float[] vertices, int[] indices){

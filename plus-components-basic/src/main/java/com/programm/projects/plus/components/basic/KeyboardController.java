@@ -31,7 +31,12 @@ public class KeyboardController implements IUpdatableComponent {
         GameObject obj = context.getObject();
 
         Mover mover = obj.getComponent(Mover.class);
-        mover.move(velocity);
+
+//        log.info("Delta: {}.", context.getDelta());
+
+        float vx = (float)(velocity.getX() * context.getDelta());
+        float vy = (float)(velocity.getY() * context.getDelta());
+        mover.move(vx, vy);
     }
 
     private void onKeyPressed(KeyPressedEvent e){

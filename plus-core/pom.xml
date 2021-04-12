@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.programm.projects</groupId>
             <artifactId>plus-maths</artifactId>
-            <version>1.4</version>
+            <version>1.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
