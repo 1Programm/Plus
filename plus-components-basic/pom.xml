@@ -14,12 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.programm.projects</groupId>
-            <artifactId>plus-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.programm.projects</groupId>
-            <artifactId>plus-renderer-api</artifactId>
+            <artifactId>plus-engine-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

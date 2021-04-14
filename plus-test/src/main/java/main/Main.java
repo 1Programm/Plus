@@ -2,16 +2,15 @@ package main;
 
 import com.programm.projects.plus.components.basic.KeyboardController;
 import com.programm.projects.plus.components.basic.VelocityRotator;
+import com.programm.projects.plus.components.basic.events.ShutdownOnKeyPress;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.engine.api.Scene;
 import com.programm.projects.plus.engine.simple.SimpleEngine;
 import com.programm.projects.plus.goh.api.IObjectConsumer;
-import com.programm.projects.plus.renderer.api.IKeyboard;
 import com.programm.projects.plus.renderer.api.components.ColorMaterial;
 import com.programm.projects.plus.renderer.api.components.Model;
-import com.programm.projects.plus.renderer.api.events.KeyReleasedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -23,15 +22,9 @@ public class Main extends Scene {
         IEngine engine = new SimpleEngine();
         engine.setScene(new Main());
 
-        engine.events().listenFor(KeyReleasedEvent.class, e -> {
-            if(e.getKeyCode() == IKeyboard.KEY_ESCAPE){
-                engine.shutdown();
-            }
-        });
+        ShutdownOnKeyPress.Escape(engine);
 
         engine.startup();
-
-        log.info("TTTTEEEST");
     }
 
     @Override
