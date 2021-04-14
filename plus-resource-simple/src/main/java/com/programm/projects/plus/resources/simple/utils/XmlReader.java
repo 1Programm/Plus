@@ -148,11 +148,13 @@ public class XmlReader {
 
             //Test for comment
             if(sb.charAt(start.i) == '!' && sb.charAt(start.i + 1) == '-' && sb.charAt(start.i + 2) == '-'){
-                if(sb.charAt(nextClosing - 1) != '-' || sb.charAt(nextClosing - 2) != '-'){
+                int nextCommentClose = sb.indexOf("-->", start.i);
+
+                if(nextCommentClose == -1){
                     throw new XmlParseException("Invalid end of comment!", nextClosing);
                 }
 
-                start.i = nextClosing + 1;
+                start.i = nextCommentClose + 3;
                 continue;
             }
 

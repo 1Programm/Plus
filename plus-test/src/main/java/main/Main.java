@@ -30,6 +30,8 @@ public class Main extends Scene {
         });
 
         engine.startup();
+
+        log.info("TTTTEEEST");
     }
 
     @Override
