@@ -24,4 +24,8 @@ public class SimpleListBatch implements IObjectBatch {
         objects.remove(o);
     }
 
+    public void clear(){
+        objects.clear();
+    }
+
 }

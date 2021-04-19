@@ -42,13 +42,17 @@ public abstract class Scene implements ISceneContext {
         }
     }
 
+    protected abstract void initScene(IObjectConsumer objects);
 
     @Override
     public void addObject(GameObject object) {
         goh.add(object);
     }
 
-    protected abstract void initScene(IObjectConsumer objects);
+    @Override
+    public Camera getCurrentCamera() {
+        return camera;
+    }
 
 
 }

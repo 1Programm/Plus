@@ -1,6 +1,8 @@
 package com.programm.projects.plus.goh.simple;
 
 import com.programm.projects.plus.core.*;
+import com.programm.projects.plus.core.components.Camera;
+import com.programm.projects.plus.core.components.Transform;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +11,20 @@ import java.util.List;
 
 @Slf4j
 public class SimpleListGOH implements IGameObjectHandler, IGameContext {
+
+    private static float dist(Camera camera, GameObject obj){
+        float camX = camera.getX();
+        float camY = camera.getY();
+
+        Transform transform = obj.getTransform();
+        float objX = transform.getX();
+        float objY = transform.getY();
+
+        float distX = camX - objX;
+        float distY = camY - objY;
+
+        return distX * distX + distY * distY;
+    }
 
     private IEngineContext engineContext;
     private IRunLoopInfo runLoopInfo;
@@ -27,14 +43,23 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
 
     @Override
     public void update() {
+        batch.clear();
+        Camera camera = engineContext.scene().getCurrentCamera();
+
         for(int i=0;i<objects.size();i++){
             currentObject = objects.get(i);
 
-            currentObject.update(this);
-            if(currentObject.isDead()){
-                objects.remove(i);
-                batch.remove(currentObject);
-                i--;
+            float dist = dist(camera, currentObject);
+
+            if(dist < (500 * 500)){
+                batch.add(currentObject);
+
+                currentObject.update(this);
+                if(currentObject.isDead()){
+                    objects.remove(i);
+                    batch.remove(currentObject);
+                    i--;
+                }
             }
         }
     }
@@ -56,7 +81,6 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
     @Override
     public void add(GameObject object) {
         objects.add(object);
-        batch.add(object);
 
         //If initialize phase is already over initialize object instantly
         if(initialized){

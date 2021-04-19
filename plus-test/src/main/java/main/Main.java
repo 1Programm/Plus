@@ -31,6 +31,7 @@ public class Main extends Scene {
     protected void initScene(IObjectConsumer objects) {
         objects.add(GameObject.create()
                 .setPosition(0, 0)
+                .add(new LoggerComponent("1", 2000))
                 .add(new KeyboardController(100))
                 .add(new Camera())
                 .add(new ColorMaterial(Color.BLUE))
@@ -39,11 +40,13 @@ public class Main extends Scene {
                 .build());
 
         objects.add(GameObject.create()
+                .add(new LoggerComponent("2", 2000))
                 .add(new ColorMaterial(Color.BLACK))
                 .add(Model.Line(0, 0, 100, 10))
                 .build());
 
         objects.add(GameObject.create()
+                .add(new LoggerComponent("3", 2000))
                 .setPosition(200, 200)
                 .setScale(1, 1)
                 .add(new ColorMaterial(Color.BLACK, Color.RED))
@@ -51,6 +54,7 @@ public class Main extends Scene {
                 .build());
 
         objects.add(GameObject.create()
+                .add(new LoggerComponent("4", 2000))
                 .setPosition(200, 200)
                 .setScale(3, 1)
                 .add(new ColorMaterial(Color.BLACK))
