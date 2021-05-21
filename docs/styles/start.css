@@ -1,0 +1,12 @@
+#title {
+    text-align: center;
+    flex: inherit;
+}
+
+#title:hover {
+    cursor: default;
+}
+
+.main-div {
+    flex: inherit;
+}
