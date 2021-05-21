@@ -3,7 +3,7 @@ var pageScript;
 var pageHistorie = [];
 
 var globals = {
-    num_pages: 3
+    num_pages: 4
 }
 
 var elementPInfo;
