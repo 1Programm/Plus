@@ -89,7 +89,7 @@ async function moveLocation(nLoc){
     }
 
 
-    var rootLoc = "/Pages/pages/" + nLoc;
+    var rootLoc = "/Plus/pages/" + nLoc;
 
     var jsLoc = rootLoc + ".js";
     var obj = (await import(jsLoc)).default;
