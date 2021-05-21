@@ -5,6 +5,7 @@ import com.programm.projects.plus.components.basic.VelocityRotator;
 import com.programm.projects.plus.components.basic.events.ShutdownOnKeyPress;
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.components.Camera;
+import com.programm.projects.plus.core.exceptions.PlusException;
 import com.programm.projects.plus.engine.api.IEngine;
 import com.programm.projects.plus.engine.api.Scene;
 import com.programm.projects.plus.engine.simple.SimpleEngine;
@@ -18,7 +19,7 @@ import java.awt.*;
 @Slf4j
 public class Main extends Scene {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         IEngine engine = new SimpleEngine();
         engine.setScene(new Main());
 
@@ -31,7 +32,6 @@ public class Main extends Scene {
     protected void initScene(IObjectConsumer objects) {
         objects.add(GameObject.create()
                 .setPosition(0, 0)
-                .add(new LoggerComponent("1", 2000))
                 .add(new KeyboardController(100))
                 .add(new Camera())
                 .add(new ColorMaterial(Color.BLUE))
@@ -40,13 +40,13 @@ public class Main extends Scene {
                 .build());
 
         objects.add(GameObject.create()
-                .add(new LoggerComponent("2", 2000))
+                .add(new LoggerComponent("Tick", 1000))
+                .add(new TimedException(1000 * 10, new PlusException("Timed Exception after 10 Seconds.")))
                 .add(new ColorMaterial(Color.BLACK))
                 .add(Model.Line(0, 0, 100, 10))
                 .build());
 
         objects.add(GameObject.create()
-                .add(new LoggerComponent("3", 2000))
                 .setPosition(200, 200)
                 .setScale(1, 1)
                 .add(new ColorMaterial(Color.BLACK, Color.RED))
@@ -54,11 +54,12 @@ public class Main extends Scene {
                 .build());
 
         objects.add(GameObject.create()
-                .add(new LoggerComponent("4", 2000))
                 .setPosition(200, 200)
                 .setScale(3, 1)
                 .add(new ColorMaterial(Color.BLACK))
                 .add(Model.Circle(50))
                 .build());
     }
+
+
 }

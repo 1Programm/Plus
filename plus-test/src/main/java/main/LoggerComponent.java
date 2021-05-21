@@ -10,6 +10,7 @@ public class LoggerComponent implements IUpdatableComponent {
     private final String name;
     private final int time;
     private long last;
+    private int count;
 
     public LoggerComponent(String name, int time) {
         this.name = name;
@@ -23,7 +24,8 @@ public class LoggerComponent implements IUpdatableComponent {
 
         if(now - last >= time){
             last = now;
-            log.info("Update: " + name);
+            count++;
+            log.info(name + " [" + count + "]");
         }
     }
 }
