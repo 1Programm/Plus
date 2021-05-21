@@ -19,7 +19,7 @@ var pageScript;
 var pageHistorie = [];
 
 var globals = {
-    num_pages: 4
+    num_pages: 3
 }
 
 var elementPInfo;
