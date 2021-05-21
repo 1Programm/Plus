@@ -1,5 +1,18 @@
-const PAGES_LOCATION = "/Plus/pages/";
-// const PAGES_LOCATION = "/pages/"; //Use this if used locally
+const IS_ON_SERVER = true;
+const SERVER_PREFIX = "/Plus/";
+
+var ROOT_LOCATION;
+
+if(IS_ON_SERVER){
+    ROOT_LOCATION = SERVER_PREFIX;
+}
+else {
+    ROOT_LOCATION = "/";
+}
+
+const PAGES_LOCATION = ROOT_LOCATION + "pages/";
+
+
 
 var main;
 var pageScript;
@@ -91,7 +104,7 @@ async function moveLocation(nLoc){
         console.log("Move to page: '" + nLoc + "'");
     }
 
-
+    
     var rootLoc = PAGES_LOCATION + nLoc;
 
     var jsLoc = rootLoc + ".js";
@@ -166,7 +179,35 @@ async function moveLocation(nLoc){
     }
 }
 
+function absolute(base, relative) {
+    var stack = base.split("/"),
+        parts = relative.split("/");
+    //stack.pop(); // remove current file name (or empty string)
+                 // (omit if "base" is the current folder without trailing slash)
+    for (var i=0; i<parts.length; i++) {
+        if (parts[i] == ".")
+            continue;
+        if (parts[i] == "..")
+            stack.pop();
+        else
+            stack.push(parts[i]);
+    }
+    return stack.join("/");
+}
+
 function inspectNode(node){
+    if(node.tagName == "LINK"){
+        console.log("A link!", node, node.attributes);
+
+        var _path = node.attributes["href"].value;
+        console.log("_Path: ", _path);
+
+        var path = absolute(ROOT_LOCATION, _path);
+        console.log("Path: ", path);
+
+        node.setAttribute("href", path)
+    }
+
     var attribs = node.attributes;
     
     if(attribs){
