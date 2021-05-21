@@ -1,3 +1,6 @@
+const PAGES_LOCATION = "/Plus/pages/";
+// const PAGES_LOCATION = "/pages/"; //Use this if used locally
+
 var main;
 var pageScript;
 var pageHistorie = [];
@@ -89,7 +92,7 @@ async function moveLocation(nLoc){
     }
 
 
-    var rootLoc = "/Plus/pages/" + nLoc;
+    var rootLoc = PAGES_LOCATION + nLoc;
 
     var jsLoc = rootLoc + ".js";
     var obj = (await import(jsLoc)).default;
