@@ -1,6 +1,7 @@
 package com.programm.projects.plus.core;
 
 import com.programm.projects.plus.core.events.IEventHandler;
+import com.programm.projects.plus.core.exceptions.IThrowableMethod;
 import com.programm.projects.plus.core.resource.IResources;
 import com.programm.projects.plus.core.settings.EngineSettings;
 
@@ -15,5 +16,8 @@ public interface IEngineContext {
     ISceneContext scene();
 
     IRenderContext rendererContext();
+
+    //TEMPORARY
+    void handleException(IThrowableMethod method);
 
 }

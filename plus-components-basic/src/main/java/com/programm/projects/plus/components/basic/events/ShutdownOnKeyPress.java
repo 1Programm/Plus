@@ -24,7 +24,7 @@ public class ShutdownOnKeyPress implements EventListener<KeyPressedEvent> {
     @Override
     public void onEvent(KeyPressedEvent event) {
         if(event.getKeyCode() == keyCode && !event.isRepeated()){
-            engine.shutdown();
+            engine.handleException(engine::shutdown);
         }
     }
 }

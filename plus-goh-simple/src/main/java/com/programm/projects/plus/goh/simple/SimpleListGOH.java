@@ -7,33 +7,28 @@ import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
 public class SimpleListGOH implements IGameObjectHandler, IGameContext {
 
-    private static float dist(Camera camera, GameObject obj){
-        float camX = camera.getX();
-        float camY = camera.getY();
+    private static final int UPDATE_TIMER = 60;
+    private static final int UPDATE_RANGE = 500 * 500;
 
-        Transform transform = obj.getTransform();
-        float objX = transform.getX();
-        float objY = transform.getY();
-
-        float distX = camX - objX;
-        float distY = camY - objY;
-
-        return distX * distX + distY * distY;
-    }
 
     private IEngineContext engineContext;
     private IRunLoopInfo runLoopInfo;
     private boolean initialized;
     private final List<GameObject> objects = new ArrayList<>();
+
+    private int timer = 0;
     private final SimpleListBatch batch = new SimpleListBatch();
 
     // Game Context
     private GameObject currentObject;
+    private final List<GameObject> justEnteredUpdateRangeList = new ArrayList<>();
+    private boolean justEnteredUpdateRange;
 
     @Override
     public void setup(IEngineContext engineContext, IRunLoopInfo runLoopInfo) {
@@ -43,22 +38,46 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
 
     @Override
     public void update() {
-        batch.clear();
+        timer--;
+        if(timer <= 0){
+            timer = UPDATE_TIMER;
+            updateBatch();
+        }
+
+        Iterator<GameObject> it = batch.iterator();
+        while(it.hasNext()){
+            currentObject = it.next();
+            justEnteredUpdateRange = false;
+            if(justEnteredUpdateRangeList.contains(currentObject)){
+                justEnteredUpdateRange = true;
+                justEnteredUpdateRangeList.remove(currentObject);
+            }
+
+            currentObject.update(this);
+
+            if(currentObject.isDead()){
+                objects.remove(currentObject);
+                it.remove();
+            }
+        }
+    }
+
+    private void updateBatch(){
         Camera camera = engineContext.scene().getCurrentCamera();
-
         for(int i=0;i<objects.size();i++){
-            currentObject = objects.get(i);
+            GameObject obj = objects.get(i);
 
-            float dist = dist(camera, currentObject);
+            float dist = dist(camera, obj);
 
-            if(dist < (500 * 500)){
-                batch.add(currentObject);
-
-                currentObject.update(this);
-                if(currentObject.isDead()){
-                    objects.remove(i);
-                    batch.remove(currentObject);
-                    i--;
+            if(batch.contains(obj)){
+                if(dist > UPDATE_RANGE){
+                    batch.remove(obj);
+                }
+            }
+            else {
+                if(dist < UPDATE_RANGE){
+                    batch.add(obj);
+                    justEnteredUpdateRangeList.add(obj);
                 }
             }
         }
@@ -94,12 +113,36 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
     }
 
     @Override
-    public GameObject getObject() {
-        return currentObject;
+    public IEngineContext engine() {
+        return engineContext;
     }
 
     @Override
     public double getDelta() {
         return runLoopInfo.getDelta();
+    }
+
+    @Override
+    public GameObject getObject() {
+        return currentObject;
+    }
+
+    @Override
+    public boolean enteredUpdateRange() {
+        return justEnteredUpdateRange;
+    }
+
+    private float dist(Camera camera, GameObject obj){
+        float camX = camera.getX();
+        float camY = camera.getY();
+
+        Transform transform = obj.getTransform();
+        float objX = transform.getX();
+        float objY = transform.getY();
+
+        float distX = camX - objX;
+        float distY = camY - objY;
+
+        return distX * distX + distY * distY;
     }
 }

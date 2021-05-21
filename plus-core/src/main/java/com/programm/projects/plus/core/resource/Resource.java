@@ -1,5 +1,7 @@
 package com.programm.projects.plus.core.resource;
 
+import java.util.function.Supplier;
+
 public interface Resource {
 
     String asString();
@@ -41,6 +43,61 @@ public interface Resource {
     default double asDouble(double defaultValue){
         Double value = asDouble();
         return value == null ? defaultValue : value;
+    }
+
+    //THROWING
+    default <T extends Exception> String asString(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        String value = asString();
+
+        if(value == null) throw ex.get();
+        return value;
+    }
+
+    default <T extends Exception> boolean asBoolean(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        Boolean value = asBoolean();
+
+        if(value == null) throw ex.get();
+        return value;
+    }
+
+    default <T extends Exception> int asInt(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        Integer value = asInt();
+
+        if(value == null) throw ex.get();
+        return value;
+    }
+
+    default <T extends Exception> long asLong(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        Long value = asLong();
+
+        if(value == null) throw ex.get();
+        return value;
+    }
+
+    default <T extends Exception> float asFloat(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        Float value = asFloat();
+
+        if(value == null) throw ex.get();
+        return value;
+    }
+
+    default <T extends Exception> double asDouble(Supplier<T> ex) throws T {
+        if(isNull()) throw ex.get();
+
+        Double value = asDouble();
+
+        if(value == null) throw ex.get();
+        return value;
     }
 
     /**

@@ -20,6 +20,10 @@ public class SimpleListBatch implements IObjectBatch {
         objects.add(o);
     }
 
+    public boolean contains(GameObject o){
+        return objects.contains(o);
+    }
+
     public void remove(GameObject o){
         objects.remove(o);
     }
