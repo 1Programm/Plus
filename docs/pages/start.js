@@ -2,10 +2,13 @@ export default {
     data: {
         title: null,
         word: null,
+
         c_t_s: {r: 0, g: 0, b: 0},
         c_t_e: {r: 173, g: 216, b: 230},
         c_w_s: {r: 173, g: 216, b: 230}, 
         c_w_e: {r: 0, g: 0, b: 0},
+
+        pinfo: "1/${global.num_pages}"
     },
 
     methods: {
@@ -49,10 +52,6 @@ export default {
         }
     },
 
-    nav: {
-        right: "contents"
-    },
-
     onfinish() {
         this.title = document.getElementById("title");
         this.word = document.getElementById("word");
@@ -60,4 +59,8 @@ export default {
         this.title.style.setProperty('color', this.color(this.c_t_s));
         this.word.style.setProperty('color', this.color(this.c_w_s));
     },
+
+    nav: {
+        right: "contents"
+    }
 };

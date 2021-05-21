@@ -1,12 +1,12 @@
 #title {
     text-align: center;
-    flex: inherit;
+    font-size: 50px;
 }
 
 #title:hover {
     cursor: default;
 }
 
-.main-div {
-    flex: inherit;
+h2 {
+    text-align: center;
 }

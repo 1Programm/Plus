@@ -1,24 +1,44 @@
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 #main {
-    /* background: red; */
-    flex: 100px 1 0;
-
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
+    margin-bottom: 60px;
 }
 
-.navbar {
-    flex: 0 0 0;
+footer {
+    background-color: #333;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}
 
-    /* position: fixed;
-    bottom: 0; */
-    padding: 10px;
-    background-color: lightblue;
+footer a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    
+    height: 60px;
+}
+
+footer p {
+    margin: 0;
+    float: left;
+    display: block;
+    color: #aaaaaa;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    
+    height: 60px;
+}
+
+footer a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+footer div{
+    float: right;
 }

@@ -2,9 +2,68 @@ var main;
 var pageScript;
 var pageHistorie = [];
 
+var globals = {
+    num_pages: 3
+}
+
+var elementPInfo;
+var pinfo = {
+    update(value){
+        elementPInfo.innerHTML = evalExpression(value);
+    },
+    get(){
+        return elementPInfo.innerHTML;
+    }
+}
+
 function init(){
     main = document.getElementById("main");
+    elementPInfo = document.getElementById("page-info");
+
     moveLocation("start");
+}
+
+function getVar(obj, varName){
+    let dot = varName.indexOf(".");
+
+    if(dot == -1){
+        return obj[varName];
+    }
+    else {
+        var objName = varName.substring(0, dot);
+        var restVarName = varName.substring(dot + 1);
+        var nextObj = obj[objName];
+        return getVar(nextObj, restVarName)
+    }
+}
+
+function evalExpression(expr){
+    var ret = "";
+
+    let i = expr.indexOf("${");
+
+    let before = 0;
+    while(i != -1){
+        ret += expr.substring(before, i);
+
+        let closing = expr.indexOf("}", i);
+
+        if(closing == -1) break;
+
+        var val = expr.substring(i+2, closing);
+        var pval = getVar(pageScript, val);
+
+        ret += pval;
+
+        before = closing + 1;
+        i = expr.indexOf("${", before);
+    }
+
+    if(before < expr.length){
+        ret += expr.substring(before);
+    }
+
+    return ret;
 }
 
 function moveBack(){
@@ -14,8 +73,21 @@ function moveBack(){
 }
 
 async function moveLocation(nLoc){
-    console.log("Move to page: " + nLoc);
     pageHistorie.push(nLoc);
+
+    //Support Hashtags for section linking
+    var hashPos = nLoc.lastIndexOf("#");
+    var hashLink;
+    if(hashPos != -1){
+        hashLink = nLoc.substring(hashPos + 1);
+        nLoc = nLoc.substring(0, hashPos);
+
+        console.log("Move to page: '" + nLoc + "' - to section: '" + hashLink + "'");
+    }
+    else {
+        console.log("Move to page: '" + nLoc + "'");
+    }
+
 
     var rootLoc = "/pages/" + nLoc;
 
@@ -37,13 +109,25 @@ async function moveLocation(nLoc){
     }
 
 
-    //Loading css
-    // var head = document.getElementsByTagName("head")[0];
-    // var nLink = document.createElement("link");
-    // nLink.id = "pageStyle";
-    // nLink.rel = "stylesheet";
-    // nLink.href = "styles/" + nLoc + ".css";
-    // head.appendChild(nLink);
+    //Setting globals
+    if(obj.global){
+        for(const [key, val] of Object.entries(obj.global)){
+            globals[key] = val;
+        }
+    }
+
+    pageScript.global = globals;
+
+
+    //Page Info Listener
+    if(pageScript.pinfo){
+        let val = pageScript.pinfo;
+        pageScript.pinfo = pinfo;
+        pageScript.pinfo.update(val);
+    }
+    else {
+        pageScript.pinfo = pinfo;
+    }
 
 
 
@@ -60,7 +144,15 @@ async function moveLocation(nLoc){
 
     inspectNode(bodyNode);
 
+
+
     main.innerHTML = bodyNode.innerHTML;
+
+    if(hashLink){
+        document.getElementById(hashLink).scrollIntoView({behavior: 'smooth'});
+    }
+    
+
 
 
 
@@ -98,15 +190,32 @@ function inspectAttribute(node, attrib){
 
     if(name.charAt(0) == "@"){
         var subName = name.substring(1);
-        if(subName == "onmouseover"){
-            
+        if(subName == "click"){
+            node.setAttribute("onclick", parseValue(attrib.value));
+        }
+        else if(subName = "ref"){
+            node.setAttribute("href", "#");
+            node.setAttribute("onclick", "moveLocation('" + attrib.value + "')")
         }
     }
     else if(name == "onmouseover" 
     || name == "onmouseout") {
-        attrib.value = "pageScript." + attrib.value;
+        attrib.value = parseValue(attrib.value);
     }
 
+}
+
+/*
+ * Bsp: <button @click="sayHi()">Test</button>
+ * Method "sayHi" only exists as a attribute inside 'pageScript'
+ * So 'pageScript.' will be added before value
+ * 
+ * 
+ * TODO: complex expressions and multiple function calls...
+ * 
+ */
+function parseValue(value){
+    return "pageScript." + value
 }
 
 function handleKeyPress(key){

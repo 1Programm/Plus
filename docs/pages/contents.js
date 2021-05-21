@@ -1,5 +1,10 @@
 export default {
+    data: {
+        pinfo: "2/${global.num_pages}"
+    },
+    
     nav: {
-        left: "back"
+        left: "start",
+        right: "introduction"
     }
 }
