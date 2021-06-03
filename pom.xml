@@ -21,6 +21,7 @@
         <module>plus-resource-api</module>
         <module>plus-resource-simple</module>
         <module>plus-components-basic</module>
+        <module>plus-collision-api</module>
     </modules>
 
     <properties>
