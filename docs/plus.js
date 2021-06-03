@@ -1,4 +1,4 @@
-const IS_ON_SERVER = true;
+const IS_ON_SERVER = false;
 const SERVER_PREFIX = "/Plus/";
 
 var ROOT_LOCATION;
@@ -89,6 +89,8 @@ function moveBack(){
 }
 
 async function moveLocation(nLoc){
+    if(!main) return;
+
     pageHistorie.push(nLoc);
 
     //Support Hashtags for section linking
@@ -159,7 +161,6 @@ async function moveLocation(nLoc){
     var bodyNode = htmlDoc.getElementsByTagName("body")[0];
 
     inspectNode(bodyNode);
-
 
 
     main.innerHTML = bodyNode.innerHTML;
