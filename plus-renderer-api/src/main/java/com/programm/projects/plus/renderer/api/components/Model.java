@@ -1,6 +1,5 @@
 package com.programm.projects.plus.renderer.api.components;
 
-import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.components.IRenderComponent;
 import com.programm.projects.plus.maths.Vector1f;
 import com.programm.projects.plus.maths.Vector2f;
@@ -59,9 +58,4 @@ public class Model implements IRenderComponent {
 
     private final Type type;
     private IRenderModel renderModel;
-
-    @Override
-    public void init(IEngineContext context) {
-        context.rendererContext().init(this);
-    }
 }

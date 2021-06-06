@@ -1,5 +1,7 @@
 package com.programm.projects.plus.engine.simple;
 
+import com.programm.projects.plus.collision.api.ICollisionHandler;
+import com.programm.projects.plus.collision.simple.SimpleCollisionHandler;
 import com.programm.projects.plus.engine.api.AbstractEngine;
 import com.programm.projects.plus.engine.api.EnginePhase;
 import com.programm.projects.plus.engine.api.IRunLoop;
@@ -18,12 +20,14 @@ public class SimpleEngine extends AbstractEngine {
     private IRunLoop tmpRunLoop;
     private IRenderer tmpRenderer;
     private IGameObjectHandler tmpGOH;
+    private ICollisionHandler tmpCollisionHandler;
 
     public SimpleEngine() {
         this.resourceLoader = new SimpleResourceLoader();
         this.tmpRunLoop = new SimpleRunLoop();
         this.tmpRenderer = new SwingRenderer();
         this.tmpGOH = new SimpleListGOH();
+        this.tmpCollisionHandler = new SimpleCollisionHandler();
     }
 
     @Override
@@ -44,6 +48,11 @@ public class SimpleEngine extends AbstractEngine {
     @Override
     protected IRenderer initRenderer() {
         return tmpRenderer;
+    }
+
+    @Override
+    protected ICollisionHandler initCollisionHandler() {
+        return tmpCollisionHandler;
     }
 
     /*
@@ -78,5 +87,10 @@ public class SimpleEngine extends AbstractEngine {
     public void setRenderer(IRenderer renderer) {
         if(testPhase()) return;
         this.tmpRenderer = renderer;
+    }
+
+    public void setCollisionHandler(ICollisionHandler collisionHandler) {
+        if(testPhase()) return;
+        this.tmpCollisionHandler = collisionHandler;
     }
 }

@@ -1,10 +1,11 @@
 package com.programm.projects.plus.resource.api;
 
+import com.programm.projects.plus.core.ISubsystem;
 import com.programm.projects.plus.core.lifecycle.ILifecycle;
 import com.programm.projects.plus.core.resource.IResources;
 import com.programm.projects.plus.core.resource.Resource;
 
-public interface IResourceManager extends ILifecycle, IResources {
+public interface IResourceManager extends ISubsystem, IResources {
 
     void loadStaticResources();
 

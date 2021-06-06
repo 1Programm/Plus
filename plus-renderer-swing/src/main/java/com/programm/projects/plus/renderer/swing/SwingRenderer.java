@@ -17,6 +17,8 @@ import java.awt.*;
 @Slf4j
 public class SwingRenderer extends AbstractObservableLifecycle implements IRenderer, IChainableLifecycle {
 
+    private boolean enabled;
+
     private final SwingComponentPreparer preparer = new SwingComponentPreparer();
     private SwingWindow window;
     private IObjectBatch renderableBatch;
@@ -59,7 +61,14 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     //OTHER METHODS
 
     @Override
+    public boolean setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return true;
+    }
+
+    @Override
     public void update() {
+        if(!enabled) return;
         if(window == null) return;
         window.canvas.render(renderableBatch, Color.WHITE, camera);
     }

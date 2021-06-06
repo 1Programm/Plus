@@ -1,5 +1,6 @@
 package com.programm.projects.plus.engine.api;
 
+import com.programm.projects.plus.collision.api.ICollisionHandler;
 import com.programm.projects.plus.core.*;
 import com.programm.projects.plus.core.events.IEventHandler;
 import com.programm.projects.plus.core.exceptions.IThrowableMethod;
@@ -20,8 +21,8 @@ import com.programm.projects.plus.renderer.api.events.WindowCloseEvent;
 import com.programm.projects.plus.resource.api.IResourceManager;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public abstract class AbstractEngine extends AbstractObservableLifecycle implements IEngine, IChainableLifecycle {
@@ -35,10 +36,12 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
 
 
     //Systems
+    private final Map<String, ISubsystem> subsystems = new HashMap<>();
     private IResourceManager resourceManager;
     private IRunLoop runLoop;
     private IRenderer renderer;
     private IGameObjectHandler goh;
+    private ICollisionHandler collisionHandler;
 
     private Scene scene;
 
@@ -51,6 +54,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     protected abstract IRunLoop initRunLoop();
     protected abstract IRenderer initRenderer();
     protected abstract IGameObjectHandler initGOH();
+    protected abstract ICollisionHandler initCollisionHandler();
 
     /*
      * -- LIFECYCLE METHODS --
@@ -65,8 +69,16 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         //INIT SYSTEMS
         this.resourceManager = initResourceManager();
         this.runLoop = initRunLoop();
-        this.goh = initGOH();
         this.renderer = initRenderer();
+        this.goh = initGOH();
+        this.collisionHandler = initCollisionHandler();
+
+        //ADD SUBSYSTEMS
+        addSubsystem("resources", resourceManager);
+        addSubsystem("run-loop", runLoop);
+        addSubsystem("renderer", renderer);
+        addSubsystem("goh", goh);
+        addSubsystem("collision", collisionHandler);
 
 
         //LOAD RESOURCES
@@ -79,36 +91,58 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
             throw new PlusFatalException("Failed to initialize Settings!", e);
         }
 
-        //ADD SUBSYSTEMS
-        addLifecycle(resourceManager);
-        addLifecycle(runLoop);
-        addLifecycle(renderer);
-        addLifecycle(goh);
-
 
         //[PREPARE] PHASE
         runLoop.setup(this::update, this);
         renderer.setup(this);
         goh.setup(this, runLoop.info());
+        collisionHandler.setup(this);
 
         scene.init(goh, renderer, this);
 
         changePhase(EnginePhase.PREPARED);
     }
 
+    private void addSubsystem(String name, ISubsystem subsystem){
+        subsystems.put(name, subsystem);
+        addLifecycle(subsystem);
+    }
+
     private void initSettings() throws PlusFatalException {
+        // ENABLE / DISABLE SUBSYSTEMS
+        for(String name : subsystems.keySet()) {
+            ISubsystem subsystem = subsystems.get(name);
+            String _enabled = "plus.engine." + name + ".enabled";
+            boolean enabled = resources().getResource(_enabled)
+                    .asBoolean(PlusFatalException.Supply("Failed to read resource [" + _enabled + "]!"));
+            boolean success = subsystem.setEnabled(enabled);
+
+            if(!enabled){
+                if(success) {
+                    log.debug("[" + subsystem.getClass().getSimpleName() + "]: DISABLED");
+                }
+                else {
+                    log.warn("[" + subsystem.getClass().getSimpleName() + "]: Could not be DISABLED!");
+                }
+            }
+        }
+
         //Init Window Settings
-        String title = resources().getResource("plus.game.window.title").asString(PlusFatalException::new);
+        String title = resources().getResource("plus.game.window.title")
+                .asString(PlusFatalException.Supply("Failed to read resource [plus.game.window.title]!"));
         settings().window().setTitle(title);
 
-        int width = resources().getResource("plus.game.window.width").asInt(PlusFatalException::new);
+        int width = resources().getResource("plus.game.window.width")
+                .asInt(PlusFatalException.Supply("Failed to read resource [plus.game.window.width]!"));
         settings.window().setWidth(width);
 
-        int height = resources().getResource("plus.game.window.height").asInt(PlusFatalException::new);
+        int height = resources().getResource("plus.game.window.height")
+                .asInt(PlusFatalException.Supply("Failed to read resource [plus.game.window.height]!"));
         settings.window().setHeight(height);
 
         //Init Run loop
-        int runLoopSyncFps = resources().getResource("plus.engine.run-loop.fps").asInt(PlusFatalException::new);
+        int runLoopSyncFps = resources().getResource("plus.engine.run-loop.fps")
+                .asInt(PlusFatalException.Supply("Failed to read resource [plus.engine.run-loop.fps]!"));
         runLoop.setSync(runLoopSyncFps);
     }
 
@@ -221,8 +255,13 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     }
 
     @Override
-    public IRenderContext rendererContext() {
+    public IRenderContext renderer() {
         return renderer;
+    }
+
+    @Override
+    public ICollisionContext collision() {
+        return collisionHandler;
     }
 
     @Override

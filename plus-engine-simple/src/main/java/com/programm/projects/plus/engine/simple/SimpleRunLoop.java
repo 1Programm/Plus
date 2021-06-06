@@ -26,6 +26,11 @@ public class SimpleRunLoop implements IRunLoop, IRunLoopInfo {
     private double delta;
 
     @Override
+    public boolean setEnabled(boolean enabled) {
+        return false;
+    }
+
+    @Override
     public void setup(Runnable updateCallback, IEngineContext context) {
         this.updateCallback = updateCallback;
 

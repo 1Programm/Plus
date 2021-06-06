@@ -4,6 +4,7 @@ import com.programm.projects.plus.core.*;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.components.Transform;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
+import com.programm.projects.plus.maths.Vector2f;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -16,6 +17,29 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
     private static final int UPDATE_TIMER = 60;
     private static final int UPDATE_RANGE = 500 * 500;
 
+    private static final int NEAREST_RANGE = 300 * 300;
+
+
+    private static float distanceSquared(GameObject o1, GameObject o2, Vector2f velocity){
+        float x1 = o1.getTransform().getX();
+        float y1 = o1.getTransform().getY();
+
+        if(velocity != null){
+            x1 += velocity.getX();
+            y1 += velocity.getY();
+        }
+
+        float x2 = o2.getTransform().getX();
+        float y2 = o2.getTransform().getY();
+
+        float distX = x2 - x1;
+        float distY = y2 - y1;
+
+        return (distX * distX + distY * distY);
+    }
+
+
+    private boolean enabled;
 
     private IEngineContext engineContext;
     private IRunLoopInfo runLoopInfo;
@@ -37,7 +61,15 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
     }
 
     @Override
+    public boolean setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return true;
+    }
+
+    @Override
     public void update() {
+        if(!enabled) return;
+
         timer--;
         if(timer <= 0){
             timer = UPDATE_TIMER;
@@ -110,6 +142,19 @@ public class SimpleListGOH implements IGameObjectHandler, IGameContext {
     @Override
     public IObjectBatch getObjectBatch() {
         return batch;
+    }
+
+    @Override
+    public IObjectBatch getNearestObjectsTo(GameObject object, Vector2f velocity) {
+        SimpleListBatch nearestBatch = new SimpleListBatch();
+
+        for(GameObject obj : batch){
+            if(obj != object && distanceSquared(object, obj, velocity) <= NEAREST_RANGE){
+                nearestBatch.add(obj);
+            }
+        }
+
+        return nearestBatch;
     }
 
     @Override

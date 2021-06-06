@@ -14,19 +14,28 @@ public class SimpleResourceLoader implements IResourceManager {
 
     private final Map<String, Resource> staticResources = new HashMap<>();
 
+    //HAS TO BE SET TO TRUE INITIALLY, OR THE ENGINE INITIALIZATION CANNOT COMPLETE!
+    private boolean enabled = true;
+
+    @Override
+    public boolean setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return true;
+    }
+
     @Override
     public void loadStaticResources() {
         log.debug("Loading static resources...");
 
         Map<String, Resource> engineDefProps = ResourceLoaderUtils.loadFile("/engine-default.properties");
         if(engineDefProps != null){
-            log.debug("Found engine-default.properties - loading default engine properties.");
+            log.debug("Found resource: [engine-default.properties].");
             insertStaticResource(engineDefProps);
         }
 
         Map<String, Resource> gameDefProps = ResourceLoaderUtils.loadFile("/game-default.properties");
         if(gameDefProps != null){
-            log.debug("Found game-default.properties - loading default game properties.");
+            log.debug("Found resource: [game-default.properties].");
             insertStaticResource(gameDefProps);
         }
 
@@ -35,12 +44,12 @@ public class SimpleResourceLoader implements IResourceManager {
         Map<String, Resource> engineProps = ResourceLoaderUtils.loadFile("/engine.properties");
 
         if(engineXml != null){
-            log.debug("Found engine.xml - loading engine properties.");
+            log.debug("Found resource: [engine.xml].");
             insertStaticResource(engineXml);
         }
 
         if(engineProps != null){
-            log.debug("Found engine.properties - loading engine properties.");
+            log.debug("Found resource: [engine.properties].");
             insertStaticResource(engineProps);
         }
 
@@ -49,12 +58,12 @@ public class SimpleResourceLoader implements IResourceManager {
         Map<String, Resource> gameProps = ResourceLoaderUtils.loadFile("/game.properties");
 
         if(gameXml != null){
-            log.debug("Found game.xml - loading game properties.");
+            log.debug("Found resource: [game.xml].");
             insertStaticResource(gameXml);
         }
 
         if(gameProps != null){
-            log.debug("Found game.properties - loading engine properties.");
+            log.debug("Found resource: [game.properties].");
             insertStaticResource(gameProps);
         }
     }
@@ -67,21 +76,22 @@ public class SimpleResourceLoader implements IResourceManager {
     }
 
     private void printResource(Map<String, Resource> map, String path){
+        if(path == null){
+            path = "";
+        }
+        else {
+            path += ".";
+        }
+
         for(String key : map.keySet()){
-            if(path == null){
-                path = key;
-            }
-            else {
-                path += "." + key;
-            }
 
             Resource resource = map.get(key);
             if(!(resource instanceof MapResource mapResource)){
                 String val = resource.asString("undefined");
-                log.trace(" | {} = {}", path, val);
+                log.trace(" | {} = {}", path + key, val);
             }
             else {
-                printResource(mapResource.getResourceMap(), path);
+                printResource(mapResource.getResourceMap(), path + key);
             }
         }
     }
@@ -100,6 +110,11 @@ public class SimpleResourceLoader implements IResourceManager {
 
     @Override
     public Resource getResource(String name) {
+        if(!enabled){
+            return new NullResource("Resource Loader is disabled and could not return the resource: [" + name + "]!");
+        }
+
+
         Resource staticRes = staticResources.get(name);
 
         if(staticRes != null){
@@ -114,7 +129,9 @@ public class SimpleResourceLoader implements IResourceManager {
             String valueName = name.substring(lastDot + 1);
 
             Resource parentResource = getResource(parentPath);
-            resource = parentResource.get(valueName);
+            if(!parentResource.isNull()){
+                resource = parentResource.get(valueName);
+            }
         }
 
         if(resource != null){
@@ -122,6 +139,6 @@ public class SimpleResourceLoader implements IResourceManager {
         }
 
         //return empty resource so no null pointer is thrown
-        return new NullResource();
+        return new NullResource("[" + name + "]: This resource is an EmptyResource and should only be used with defaults. A resource can be checked if it represents an empty resource by the isEmptyResource() method.");
     }
 }

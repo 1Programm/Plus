@@ -7,6 +7,8 @@ public interface IRenderer extends ISubsystem, IRenderContext {
 
     void setup(IEngineContext context);
 
+    void update();
+
     void addCamera(Camera camera);
 
     void setRenderableBatch(IObjectBatch renderableBatch);

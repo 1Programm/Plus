@@ -2,11 +2,13 @@ package com.programm.projects.plus.engine.api;
 
 import com.programm.projects.plus.core.GameObject;
 import com.programm.projects.plus.core.IEngineContext;
+import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.core.ISceneContext;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.events.RegisterCameraEvent;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.goh.api.IObjectConsumer;
+import com.programm.projects.plus.maths.Vector2f;
 import com.programm.projects.plus.renderer.api.IRenderer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +49,11 @@ public abstract class Scene implements ISceneContext {
     @Override
     public void addObject(GameObject object) {
         goh.add(object);
+    }
+
+    @Override
+    public IObjectBatch getNearestObjectsTo(GameObject object, Vector2f velocity) {
+        return goh.getNearestObjectsTo(object, velocity);
     }
 
     @Override
