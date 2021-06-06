@@ -48,7 +48,7 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
     protected EnginePhase phase = EnginePhase.ALIVE;
     private boolean stopRequest = false;
 
-
+    protected abstract void init(IResourceManager resourceManager);
 
     protected abstract IResourceManager initResourceManager();
     protected abstract IRunLoop initRunLoop();
@@ -79,6 +79,10 @@ public abstract class AbstractEngine extends AbstractObservableLifecycle impleme
         addSubsystem("renderer", renderer);
         addSubsystem("goh", goh);
         addSubsystem("collision", collisionHandler);
+
+
+        //INIT ENGINE IMPLEMENTATION
+        init(resourceManager);
 
 
         //LOAD RESOURCES

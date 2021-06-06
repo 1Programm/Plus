@@ -6,13 +6,23 @@ import com.programm.projects.plus.resource.api.IResourceManager;
 import com.programm.projects.plus.core.resource.Resource;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 public class SimpleResourceLoader implements IResourceManager {
 
+    private final List<String> staticResourcePaths = new ArrayList<>();
+    private boolean loadedStatics = false;
+
     private final Map<String, Resource> staticResources = new HashMap<>();
+    private final Map<String, Resource> dynamicResources = new HashMap<>();
 
     //HAS TO BE SET TO TRUE INITIALLY, OR THE ENGINE INITIALIZATION CANNOT COMPLETE!
     private boolean enabled = true;
@@ -24,47 +34,33 @@ public class SimpleResourceLoader implements IResourceManager {
     }
 
     @Override
+    public void addStaticResource(String path) {
+        staticResourcePaths.add(path);
+
+        if(loadedStatics){
+            loadResource(path);
+        }
+    }
+
+    @Override
     public void loadStaticResources() {
         log.debug("Loading static resources...");
 
-        Map<String, Resource> engineDefProps = ResourceLoaderUtils.loadFile("/engine-default.properties");
-        if(engineDefProps != null){
-            log.debug("Found resource: [engine-default.properties].");
-            insertStaticResource(engineDefProps);
+        for(String path : staticResourcePaths){
+            loadResource(path);
         }
 
-        Map<String, Resource> gameDefProps = ResourceLoaderUtils.loadFile("/game-default.properties");
-        if(gameDefProps != null){
-            log.debug("Found resource: [game-default.properties].");
-            insertStaticResource(gameDefProps);
+        loadedStatics = true;
+    }
+
+    private void loadResource(String path){
+        Map<String, Resource> props = ResourceLoaderUtils.loadFile(path);
+        if(props != null){
+            log.debug("Found resource: [" + path + "].");
+            insertStaticResource(props);
         }
-
-        //Overriding default engine values
-        Map<String, Resource> engineXml = ResourceLoaderUtils.loadFile("/engine.xml");
-        Map<String, Resource> engineProps = ResourceLoaderUtils.loadFile("/engine.properties");
-
-        if(engineXml != null){
-            log.debug("Found resource: [engine.xml].");
-            insertStaticResource(engineXml);
-        }
-
-        if(engineProps != null){
-            log.debug("Found resource: [engine.properties].");
-            insertStaticResource(engineProps);
-        }
-
-        //Overriding default engine values
-        Map<String, Resource> gameXml = ResourceLoaderUtils.loadFile("/game.xml");
-        Map<String, Resource> gameProps = ResourceLoaderUtils.loadFile("/game.properties");
-
-        if(gameXml != null){
-            log.debug("Found resource: [game.xml].");
-            insertStaticResource(gameXml);
-        }
-
-        if(gameProps != null){
-            log.debug("Found resource: [game.properties].");
-            insertStaticResource(gameProps);
+        else {
+            log.debug("Couldn't find [" + path + "].");
         }
     }
 
@@ -114,13 +110,40 @@ public class SimpleResourceLoader implements IResourceManager {
             return new NullResource("Resource Loader is disabled and could not return the resource: [" + name + "]!");
         }
 
+        log.trace("Getting Resource [{}] ...", name);
 
+        Resource resource;
+
+        //FILE
+        if(name.startsWith("f:")){
+            resource = getFileResource(name);
+        }
+        //STATIC RESOURCE
+        else {
+            resource = getStaticResource(name);
+        }
+
+        if(resource != null){
+            return resource;
+        }
+
+        log.debug("Could not find resource [{}]!", name);
+
+        //return empty resource so no null pointer is thrown
+        return new NullResource("[" + name + "]: This resource is an EmptyResource and should only be used with defaults. A resource can be checked if it represents an empty resource by the isEmptyResource() method.");
+    }
+
+    private Resource getStaticResource(String name){
+
+        //Try full path
         Resource staticRes = staticResources.get(name);
 
         if(staticRes != null){
             return staticRes;
         }
 
+
+        //Try with "." separated
         Resource resource = null;
 
         int lastDot = name.lastIndexOf('.');
@@ -134,11 +157,45 @@ public class SimpleResourceLoader implements IResourceManager {
             }
         }
 
-        if(resource != null){
-            return resource;
-        }
+        return resource;
+    }
 
-        //return empty resource so no null pointer is thrown
-        return new NullResource("[" + name + "]: This resource is an EmptyResource and should only be used with defaults. A resource can be checked if it represents an empty resource by the isEmptyResource() method.");
+    private Resource getFileResource(String name){
+        Resource resource = dynamicResources.get(name);
+
+        if(resource != null){
+            if(resource.isFile()){
+                return resource;
+            }
+            else {
+                log.warn("Resource [{}] is not a file and collides with filepath: [{}]", resource, name);
+                return resource;
+            }
+        }
+        else {
+            // name = "f:..."
+            String filePath = name.substring(2);
+            URL url = SimpleResourceLoader.class.getResource(filePath);
+
+            if(url != null){
+                try {
+                    File file = new File(url.toURI());
+
+                    if(!file.isFile()){
+                        return new NullResource("Could not find file: [" + filePath + "]!");
+                    }
+
+                    FileResource fileResource = new FileResource(file);
+                    dynamicResources.put(name, fileResource);
+                    return fileResource;
+                }
+                catch (URISyntaxException e) {
+                    log.error("URI SyntaxException: Could not parse url to uri: [" + url + "]!");
+                }
+            }
+
+            //TODO: CONFIG A WORKSPACE PATH WHERE USER CAN STORE RESOURCES AND CHECK THAT WORKSPACE FOR RES HERE
+            return new NullResource("Could not find file: [" + filePath + "]!");
+        }
     }
 }

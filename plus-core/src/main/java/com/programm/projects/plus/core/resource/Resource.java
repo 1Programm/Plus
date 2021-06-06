@@ -1,5 +1,6 @@
 package com.programm.projects.plus.core.resource;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 public interface Resource {
@@ -14,6 +15,9 @@ public interface Resource {
     Double asDouble();
 
     default boolean isNull(){ return false; }
+
+    default boolean isFile() { return false; }
+    default File asFile() { return null; }
 
 
     //DEFAULTS

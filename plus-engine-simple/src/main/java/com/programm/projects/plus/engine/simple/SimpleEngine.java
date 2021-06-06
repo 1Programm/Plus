@@ -31,6 +31,16 @@ public class SimpleEngine extends AbstractEngine {
     }
 
     @Override
+    protected void init(IResourceManager resourceManager) {
+        resourceManager.addStaticResource("/engine-default.properties");
+        resourceManager.addStaticResource("/game-default.properties");
+        resourceManager.addStaticResource("/engine.xml");
+        resourceManager.addStaticResource("/engine.properties");
+        resourceManager.addStaticResource("/game.xml");
+        resourceManager.addStaticResource("/game.properties");
+    }
+
+    @Override
     protected IResourceManager initResourceManager() {
         return resourceLoader;
     }
