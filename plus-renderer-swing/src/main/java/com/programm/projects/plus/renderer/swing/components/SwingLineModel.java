@@ -4,6 +4,7 @@ import com.programm.projects.plus.maths.Vector2f;
 import com.programm.projects.plus.renderer.api.components.ShapeModel;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class SwingLineModel implements ISwingRenderModel{
 
@@ -22,5 +23,10 @@ public class SwingLineModel implements ISwingRenderModel{
     @Override
     public void renderBounds(Graphics2D g2d) {
         g2d.drawLine((int)l1.getX(), (int)l1.getY(), (int)l2.getX(), (int)l2.getY());
+    }
+
+    @Override
+    public void renderImage(Graphics2D g2d, BufferedImage image) {
+        //TODO
     }
 }

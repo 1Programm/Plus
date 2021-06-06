@@ -1,21 +1,29 @@
 package com.programm.projects.plus.renderer.swing;
 
 import com.programm.projects.plus.core.GameObject;
+import com.programm.projects.plus.core.IEngineContext;
 import com.programm.projects.plus.core.IObjectBatch;
 import com.programm.projects.plus.core.components.Camera;
 import com.programm.projects.plus.core.components.Transform;
-import com.programm.projects.plus.renderer.api.components.ColorMaterial;
-import com.programm.projects.plus.renderer.api.components.IRenderModel;
-import com.programm.projects.plus.renderer.api.components.Model;
+import com.programm.projects.plus.core.resource.Resource;
+import com.programm.projects.plus.renderer.api.components.*;
 import com.programm.projects.plus.renderer.swing.components.ISwingRenderModel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class SwingCanvas extends Canvas {
 
-    public void render(IObjectBatch renderableBatch, Color backgroundColor, Camera camera){
+    private final Map<String, BufferedImage> images = new HashMap<>();
+
+    public void render(IEngineContext context, IObjectBatch renderableBatch, Color backgroundColor, Camera camera){
         BufferStrategy bs = getBufferStrategy();
 
         if(bs == null){
@@ -39,10 +47,10 @@ class SwingCanvas extends Canvas {
         g2d.setColor(Color.BLACK);
         for(GameObject obj : renderableBatch){
 
-            ColorMaterial colorMaterial = obj.getComponent(ColorMaterial.class);
+            List<Material> materials = obj.getComponentList(Material.class);
             List<Model> models = obj.getComponentList(Model.class);
 
-            if(models.size() != 0 && colorMaterial != null){
+            if(!models.isEmpty() && ! materials.isEmpty()){
                 Transform transform = obj.getTransform();
                 int x = (int)transform.getX();
                 int y = (int)transform.getY();
@@ -56,21 +64,47 @@ class SwingCanvas extends Canvas {
 
 
                 Model model = models.get(0);
+                Material material = materials.get(0);
+
                 IRenderModel renderModel = model.getRenderModel();
 
-                if(renderModel instanceof ISwingRenderModel swingModel) {
-                    Color fillColor = colorMaterial.getFillColor();
+                if(material instanceof ColorMaterial colorMaterial) {
+                    if (renderModel instanceof ISwingRenderModel swingModel) {
+                        Color fillColor = colorMaterial.getFillColor();
 
-                    if(fillColor != null){
-                        g2d.setColor(fillColor);
-                        swingModel.renderFill(g2d);
+                        if (fillColor != null) {
+                            g2d.setColor(fillColor);
+                            swingModel.renderFill(g2d);
+                        }
+
+                        Color borderColor = colorMaterial.getBorderColor();
+
+                        if (borderColor != null) {
+                            g2d.setColor(borderColor);
+                            swingModel.renderBounds(g2d);
+                        }
                     }
+                }
+                else if(material instanceof ImageMaterial imageMaterial){
+                    if (renderModel instanceof ISwingRenderModel swingModel) {
+                        String resourcePath = imageMaterial.getResourcePath();
+                        BufferedImage image = images.get(resourcePath);
 
-                    Color borderColor = colorMaterial.getBorderColor();
+                        if(image == null){
+                            //TODO: not dynamic but on scene initialization !!!
+                            Resource resource = context.resources().getResource(resourcePath);
 
-                    if(borderColor != null){
-                        g2d.setColor(borderColor);
-                        swingModel.renderBounds(g2d);
+                            File f = resource.asFile();
+                            try {
+                                image = ImageIO.read(f);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            images.put(resourcePath, image);
+                        }
+
+                        swingModel.renderImage(g2d, image);
                     }
                 }
 

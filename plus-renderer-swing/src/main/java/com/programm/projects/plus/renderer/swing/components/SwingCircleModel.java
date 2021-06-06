@@ -4,6 +4,7 @@ import com.programm.projects.plus.maths.Vector1f;
 import com.programm.projects.plus.renderer.api.components.ShapeModel;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class SwingCircleModel implements ISwingRenderModel{
 
@@ -29,5 +30,10 @@ public class SwingCircleModel implements ISwingRenderModel{
         int y = (int)(-radius.getVal());
 
         g2d.drawOval(x, y, w, h);
+    }
+
+    @Override
+    public void renderImage(Graphics2D g2d, BufferedImage image) {
+        //TODO
     }
 }

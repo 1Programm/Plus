@@ -20,6 +20,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     private boolean enabled;
 
     private final SwingComponentPreparer preparer = new SwingComponentPreparer();
+    private IEngineContext engineContext;
     private SwingWindow window;
     private IObjectBatch renderableBatch;
 
@@ -28,6 +29,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     // LIFECYCLE METHODS
     @Override
     public void setup(IEngineContext context) {
+        this.engineContext = context;
         WindowSettings settings = context.settings().window();
 
         window = new SwingWindow(settings.getTitle(), settings.getWidth(), settings.getHeight(), context.events());
@@ -70,7 +72,7 @@ public class SwingRenderer extends AbstractObservableLifecycle implements IRende
     public void update() {
         if(!enabled) return;
         if(window == null) return;
-        window.canvas.render(renderableBatch, Color.WHITE, camera);
+        window.canvas.render(engineContext, renderableBatch, Color.WHITE, camera);
     }
 
     @Override
