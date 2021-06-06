@@ -4,7 +4,7 @@ import com.programm.projects.plus.core.components.Transform;
 
 public class AbstractComponent implements IComponent {
 
-    private GameObject parent;
+    protected GameObject parent;
 
     void setParent(GameObject parent){
         this.parent = parent;

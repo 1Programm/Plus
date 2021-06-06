@@ -4,6 +4,8 @@ import java.util.function.Supplier;
 
 public interface Resource {
 
+    //TODO: PATH AND ORIGIN
+
     String asString();
     Boolean asBoolean();
     Integer asInt();

@@ -124,6 +124,10 @@ public class GameObject implements IUpdatable, IInitializable{
         mover.update(this);
     }
 
+    public <T extends IComponent> boolean hasComponent(Class<T> cls){
+        return componentMap.containsKey(cls);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends IComponent> T getComponent(Class<T> cls){
         IComponent component = componentMap.get(cls);

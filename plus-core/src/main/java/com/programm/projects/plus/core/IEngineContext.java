@@ -15,7 +15,9 @@ public interface IEngineContext {
 
     ISceneContext scene();
 
-    IRenderContext rendererContext();
+    IRenderContext renderer();
+
+    ICollisionContext collision();
 
     //TEMPORARY
     void handleException(IThrowableMethod method);
