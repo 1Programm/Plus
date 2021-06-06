@@ -1,7 +1,7 @@
 <plus>
     <logging>
         <engine>
-            <level>WARN</level>
+            <level>TRACE</level>
         </engine>
         <client>
             <level>TRACE</level>
