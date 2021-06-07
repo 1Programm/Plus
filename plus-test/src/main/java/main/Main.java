@@ -31,34 +31,41 @@ public class Main extends Scene {
     @Override
     protected void initScene(IObjectConsumer objects) {
         objects.add(GameObject.create()
-                .setPosition(130, 150)
-                .add(new KeyboardController(100))
+                .setPosition(0, 0)
+                .add(new MoveReverseOnCollisionComponent(50, 0))
                 .add(new Collider())
                 .add(new Camera())
-                .add(new ImageMaterial("f:/test.png"))
+                .add(new ColorMaterial(Color.BLACK))
                 .add(Model.Rectangle(32, 32))
                 .build());
 
         objects.add(GameObject.create()
-                .setPosition(-100, 140)
-                .add(new ColorMaterial(Color.BLACK))
+                .setPosition(-200, 0)
                 .add(new Collider())
-                .add(Model.Line(0, 0, 100, 160))
+                .add(new ColorMaterial(Color.RED))
+                .add(Model.Rectangle(32, 32))
                 .build());
 
         objects.add(GameObject.create()
-                .setPosition(230, 200)
-                .add(new ColorMaterial(Color.BLACK, Color.RED))
-                .add(Model.Rectangle(100, 100))
+                .setPosition(200, 0)
                 .add(new Collider())
+                .add(new ColorMaterial(Color.RED))
+                .add(Model.Rectangle(32, 32))
                 .build());
 
-//        objects.add(GameObject.create()
-//                .setPosition(0, 0)
-//                .setScale(1, 1)
-//                .add(new ColorMaterial(Color.BLACK))
-//                .add(Model.Circle(500))
-//                .build());
+//        int size = 10;
+//        for(int x=-size;x<size;x++){
+//            for(int y=-size;y<size;y++){
+//                if(x != -size && x != size-1 && y != -size && y != size-1) continue;
+//
+//                objects.add(GameObject.create()
+//                        .setPosition(x * 32, y * 32)
+//                        .add(new Collider())
+//                        .add(new ColorMaterial(Color.RED))
+//                        .add(Model.Rectangle(32, 32))
+//                        .build());
+//            }
+//        }
     }
 
 
