@@ -23,3 +23,5 @@ build/
 gradlew
 gradlew.bat
 settings.gradle
+
+docs/STATICS.js
