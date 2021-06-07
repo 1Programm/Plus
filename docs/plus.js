@@ -1,17 +1,20 @@
-const IS_ON_SERVER = false;
+import { ON_SERVER } from "./STATICS.js"
+
+
 const SERVER_PREFIX = "/Plus/";
 
 var ROOT_LOCATION;
 
-if(IS_ON_SERVER){
+if(ON_SERVER){
+    console.log("-- STARTED ON SERVER --");
     ROOT_LOCATION = SERVER_PREFIX;
 }
 else {
+    console.log("-- STARTED BY CLIENT --");
     ROOT_LOCATION = "/";
 }
 
 const PAGES_LOCATION = ROOT_LOCATION + "pages/";
-
 
 
 var main;
@@ -32,7 +35,7 @@ var pinfo = {
     }
 }
 
-function init(){
+window.init = function(){
     main = document.getElementById("main");
     elementPInfo = document.getElementById("page-info");
 
@@ -82,13 +85,13 @@ function evalExpression(expr){
     return ret;
 }
 
-function moveBack(){
+window.moveBack = function moveBack(){
     pageHistorie.pop();
     var nLoc = pageHistorie.pop();
     moveLocation(nLoc);
 }
 
-async function moveLocation(nLoc){
+window.moveLocation = async function moveLocation(nLoc){
     if(!main) return;
 
     pageHistorie.push(nLoc);
@@ -113,6 +116,7 @@ async function moveLocation(nLoc){
     var obj = (await import(jsLoc)).default;
     
     pageScript = obj;
+    window.pageScript = pageScript;
 
     if(obj.methods){
         for(const [key, val] of Object.entries(obj.methods)){
@@ -263,7 +267,7 @@ function parseValue(value){
     return "pageScript." + value
 }
 
-function handleKeyPress(key){
+window.handleKeyPress = function(key){
     var keyCode = event.code;
 
     if(key){
