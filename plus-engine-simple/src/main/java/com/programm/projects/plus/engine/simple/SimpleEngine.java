@@ -15,20 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SimpleEngine extends AbstractEngine {
 
-    private final IResourceManager resourceLoader;
-    private final IRunLoop tmpRunLoop;
-    private final IRenderer tmpRenderer;
-    private final IGameObjectHandler tmpGOH;
-    private final ICollisionHandler tmpCollisionHandler;
-
-    public SimpleEngine() {
-        this.resourceLoader = new SimpleResourceLoader();
-        this.tmpRunLoop = new SimpleRunLoop();
-        this.tmpRenderer = new SwingRenderer();
-        this.tmpGOH = new SimpleListGOH();
-        this.tmpCollisionHandler = new SimpleCollisionHandler();
-    }
-
     @Override
     protected void init(IResourceManager resourceManager) {
         resourceManager.addStaticResource("/engine-default.properties");
@@ -41,26 +27,26 @@ public class SimpleEngine extends AbstractEngine {
 
     @Override
     protected IResourceManager initResourceManager() {
-        return resourceLoader;
+        return new SimpleResourceLoader();
     }
 
     @Override
     protected IRunLoop initRunLoop() {
-        return tmpRunLoop;
+        return new SimpleRunLoop();
     }
 
     @Override
     protected IGameObjectHandler initGOH() {
-        return tmpGOH;
+        return new SimpleListGOH();
     }
 
     @Override
     protected IRenderer initRenderer() {
-        return tmpRenderer;
+        return new SwingRenderer();
     }
 
     @Override
     protected ICollisionHandler initCollisionHandler() {
-        return tmpCollisionHandler;
+        return new SimpleCollisionHandler();
     }
 }
