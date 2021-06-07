@@ -3,7 +3,6 @@ package com.programm.projects.plus.engine.simple;
 import com.programm.projects.plus.collision.api.ICollisionHandler;
 import com.programm.projects.plus.collision.simple.SimpleCollisionHandler;
 import com.programm.projects.plus.engine.api.AbstractEngine;
-import com.programm.projects.plus.engine.api.EnginePhase;
 import com.programm.projects.plus.engine.api.IRunLoop;
 import com.programm.projects.plus.goh.api.IGameObjectHandler;
 import com.programm.projects.plus.goh.simple.SimpleListGOH;
@@ -16,11 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SimpleEngine extends AbstractEngine {
 
-    private IResourceManager resourceLoader;
-    private IRunLoop tmpRunLoop;
-    private IRenderer tmpRenderer;
-    private IGameObjectHandler tmpGOH;
-    private ICollisionHandler tmpCollisionHandler;
+    private final IResourceManager resourceLoader;
+    private final IRunLoop tmpRunLoop;
+    private final IRenderer tmpRenderer;
+    private final IGameObjectHandler tmpGOH;
+    private final ICollisionHandler tmpCollisionHandler;
 
     public SimpleEngine() {
         this.resourceLoader = new SimpleResourceLoader();
@@ -63,44 +62,5 @@ public class SimpleEngine extends AbstractEngine {
     @Override
     protected ICollisionHandler initCollisionHandler() {
         return tmpCollisionHandler;
-    }
-
-    /*
-     * GETTER AND SETTER
-     * Can only be used before starting the engine
-     */
-
-    private boolean testPhase(){
-        if(phase() != EnginePhase.ALIVE){
-            log.error("Cannot set Subsystems after engine started!");
-            return true;
-        }
-
-        return false;
-    }
-
-    public void setResourceLoader(IResourceManager resourceLoader){
-        if(testPhase()) return;
-        this.resourceLoader = resourceLoader;
-    }
-
-    public void setRunLoop(IRunLoop runLoop) {
-        if(testPhase()) return;
-        this.tmpRunLoop = runLoop;
-    }
-
-    public void setGOH(IGameObjectHandler goh) {
-        if(testPhase()) return;
-        this.tmpGOH = goh;
-    }
-
-    public void setRenderer(IRenderer renderer) {
-        if(testPhase()) return;
-        this.tmpRenderer = renderer;
-    }
-
-    public void setCollisionHandler(ICollisionHandler collisionHandler) {
-        if(testPhase()) return;
-        this.tmpCollisionHandler = collisionHandler;
     }
 }
