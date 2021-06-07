@@ -120,4 +120,9 @@ public final class NullResource implements Resource{
     public <T extends Exception> double asDouble(Supplier<T> ex) throws T {
         throw throwException();
     }
+
+    @Override
+    public String toString() {
+        return "Null Resource [err:" + errorMessage + "]";
+    }
 }

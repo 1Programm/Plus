@@ -44,7 +44,7 @@ public class SimpleResourceLoader implements IResourceManager {
 
     @Override
     public void loadStaticResources() {
-        log.debug("Loading static resources...");
+        log.debug("# Loading static resources...");
 
         for(String path : staticResourcePaths){
             loadResource(path);
@@ -55,17 +55,18 @@ public class SimpleResourceLoader implements IResourceManager {
 
     private void loadResource(String path){
         Map<String, Resource> props = ResourceLoaderUtils.loadFile(path);
+        String pre = log.isTraceEnabled() ? "| # " : "| ";
+
         if(props != null){
-            log.debug("Found resource: [" + path + "].");
+            log.debug(pre + "Static resource: [" + path + "].");
             insertStaticResource(props);
         }
         else {
-            log.debug("Couldn't find [" + path + "].");
+            log.debug(pre + "Couldn't find [" + path + "].");
         }
     }
 
     private void insertStaticResource(Map<String, Resource> resourceMap){
-        log.trace("Properties:");
         printResource(resourceMap, null);
 
         ResourceLoaderUtils.insertResource(staticResources, resourceMap);
@@ -80,11 +81,11 @@ public class SimpleResourceLoader implements IResourceManager {
         }
 
         for(String key : map.keySet()){
-
             Resource resource = map.get(key);
+
             if(!(resource instanceof MapResource mapResource)){
                 String val = resource.asString("undefined");
-                log.trace(" | {} = {}", path + key, val);
+                log.trace("| | {} = {}", path + key, val);
             }
             else {
                 printResource(mapResource.getResourceMap(), path + key);
@@ -110,8 +111,6 @@ public class SimpleResourceLoader implements IResourceManager {
             return new NullResource("Resource Loader is disabled and could not return the resource: [" + name + "]!");
         }
 
-        log.trace("Getting Resource [{}] ...", name);
-
         Resource resource;
 
         //FILE
@@ -120,20 +119,23 @@ public class SimpleResourceLoader implements IResourceManager {
         }
         //STATIC RESOURCE
         else {
-            resource = getStaticResource(name);
+            resource = getStaticResource(name, true);
         }
 
         if(resource != null){
             return resource;
         }
 
-        log.debug("Could not find resource [{}]!", name);
+        log.trace("Could not find resource [{}]!", name);
 
         //return empty resource so no null pointer is thrown
         return new NullResource("[" + name + "]: This resource is an EmptyResource and should only be used with defaults. A resource can be checked if it represents an empty resource by the isEmptyResource() method.");
     }
 
-    private Resource getStaticResource(String name){
+    private Resource getStaticResource(String name, boolean print){
+        if(print){
+            log.trace("Getting Resource [{}] ...", name);
+        }
 
         //Try full path
         Resource staticRes = staticResources.get(name);
@@ -151,7 +153,7 @@ public class SimpleResourceLoader implements IResourceManager {
             String parentPath = name.substring(0, lastDot);
             String valueName = name.substring(lastDot + 1);
 
-            Resource parentResource = getResource(parentPath);
+            Resource parentResource = getStaticResource(parentPath, false);
             if(!parentResource.isNull()){
                 resource = parentResource.get(valueName);
             }

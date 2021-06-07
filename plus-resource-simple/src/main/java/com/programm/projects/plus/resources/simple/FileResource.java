@@ -25,4 +25,9 @@ public class FileResource implements DefaultValuesResource {
     public Resource get(String name) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "File: [path:" + file.getAbsolutePath() + "]";
+    }
 }

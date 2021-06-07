@@ -1,18 +1,32 @@
 package com.programm.projects.plus.resources.simple;
 
 import com.programm.projects.plus.core.resource.Resource;
+import com.programm.projects.plus.resource.api.DefaultValuesResource;
 import com.programm.projects.plus.resource.api.MapResource;
-import com.programm.projects.plus.resource.api.NamedResource;
 import com.programm.projects.plus.resource.api.ValueResource;
 import com.programm.projects.plus.resources.simple.utils.XmlReadException;
 import com.programm.projects.plus.resources.simple.utils.XmlReader;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 class ResourceLoaderUtils {
+
+    @RequiredArgsConstructor
+    @Getter
+    private static final class NamedResource implements DefaultValuesResource {
+
+        private final String name;
+        private final Resource resource;
+
+        @Override
+        public Resource get(String name) {
+            return resource;
+        }
+    }
 
     public static void insertResource(Map<String, Resource> map, Map<String, Resource> nMap){
         for(String key : nMap.keySet()){

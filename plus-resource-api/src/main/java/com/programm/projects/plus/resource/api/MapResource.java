@@ -17,4 +17,9 @@ public class MapResource implements DefaultValuesResource{
     public Resource get(String name) {
         return resourceMap.get(name);
     }
+
+    @Override
+    public String toString() {
+        return "Map: [size:" + resourceMap.size() + "]";
+    }
 }
