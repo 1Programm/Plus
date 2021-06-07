@@ -8,6 +8,9 @@ import com.programm.projects.plus.renderer.api.components.ShapeModel;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Collider extends AbstractComponent {
 
@@ -19,6 +22,7 @@ public class Collider extends AbstractComponent {
         return new Collider(ColliderType.AABB, false, new AABB(minX, minY, maxX, maxY));
     }
 
+    private final List<ICollisionListener> collisionListeners = new ArrayList<>();
     private ColliderType type;
     private boolean dynamic;
 
@@ -82,5 +86,13 @@ public class Collider extends AbstractComponent {
             aabb.setMinX(-radius);
             aabb.setMinY(-radius);
         }
+    }
+
+    public void listen(ICollisionListener listener){
+        collisionListeners.add(listener);
+    }
+
+    public List<ICollisionListener> getCollisionListeners() {
+        return collisionListeners;
     }
 }

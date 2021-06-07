@@ -10,6 +10,9 @@ import com.programm.projects.plus.maths.Vector1f;
 import com.programm.projects.plus.maths.Vector2f;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 public class SimpleCollisionHandler implements ICollisionHandler {
 
@@ -60,6 +63,8 @@ public class SimpleCollisionHandler implements ICollisionHandler {
         float vxOff = 0;
         float vyOff = 0;
 
+        List<SimpleCollisionInfo> collisions = new ArrayList<>();
+
         for(GameObject obj : nearest){
             Collider c2 = obj.getComponent(Collider.class);
             if(c2 != null){
@@ -78,6 +83,11 @@ public class SimpleCollisionHandler implements ICollisionHandler {
                 if(maxY1 < minY2) continue;
                 if(minY1 > maxY2) continue;
 
+                SimpleCollisionInfo info = new SimpleCollisionInfo();
+                collisions.add(info);
+                info.o1 = object;
+                info.o2 = obj;
+
 
                 float diffX1 = Math.abs(minX1 - maxX2); // RIGHT
                 float diffX2 = Math.abs(maxX1 - minX2); // LEFT
@@ -94,12 +104,16 @@ public class SimpleCollisionHandler implements ICollisionHandler {
                 boolean isHorizontal = minDiffHorizontal < minDiffVertical;
 
                 if(isHorizontal){
+                    info.intersectionNormal = new Vector2f(minIsDiffX1 ? 1 : -1, 0);
+
                     if(vxOff < minDiffHorizontal){
                         vxOff = minDiffHorizontal;
                         vxSign = minIsDiffX1 ? 1 : -1;
                     }
                 }
                 else {
+                    info.intersectionNormal = new Vector2f(0, minIsDiffY1 ? 1 : -1);
+
                     if(vyOff < minDiffVertical){
                         vyOff = minDiffVertical;
                         vySign = minIsDiffY1 ? 1 : -1;
@@ -109,6 +123,10 @@ public class SimpleCollisionHandler implements ICollisionHandler {
         }
 
         velocity.add(vxOff * vxSign, vyOff * vySign);
+
+        for(SimpleCollisionInfo info : collisions){
+            c1.getCollisionListeners().forEach(listener -> listener.onCollision(info.o2, info.intersectionNormal));
+        }
     }
 
     @Override
